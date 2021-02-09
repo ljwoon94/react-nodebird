@@ -1,9 +1,14 @@
 import React from 'react';
+import AppLayout from '../components/AppLayout';
 //next에선 import React를 반드시 할 필요가 없다.
 //next는 pages 폴더를 인식해서 개별적으로 페이지로 만든다.
 const Home = () =>{
     return(
-        <div>Hello, Next!</div>
+        <AppLayout>
+            <div>Hello, Next!</div>
+        </AppLayout>
+        // AppLayout은 components 폴더에 있다.
+        // AppLayout 안에 있는 div는 {children}이 된다.
     );
 }
 
