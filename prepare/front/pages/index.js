@@ -14,6 +14,9 @@ const Home = () => {
 
 export default Home;
 
-console.log("");
+
 // npm run dev 라고 입력하면 package.json 에 scripts에 정의해둔
-// 스크립트가 실행된다. dev 말고 정의해둔 값을 입력하면 스크립트 실행된다.  
+// 스크립트가 실행된다. dev 말고 정의해둔 값을 입력하면 스크립트 실행된다.
+// antd, antd icon 따로 설치 
+// antd는 ant design으로 중국 디자인 사이트
+// antd 안먹히면 @ctrl/tinycolor 3.3.1 추가해라

@@ -1,24 +1,34 @@
 import React from 'react';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import Link from 'next/link';
 //next에서 제공하는 Link 컴포넌트
+import { Menu } from 'antd';
+// antd는 ant design으로 중국 디자인 사이트
+import 'antd/dist/antd.css'
 
-const AppLayout =({children})=>{
-    return(
+
+const AppLayout = ({ children }) => {
+    return (
         <div>
-            <div>
-                <Link href="/"><a>노드버드</a></Link>
-                <Link href="/profile"><a>프로필</a></Link>
-                <Link href="/signup"><a>회원가입</a></Link>
-            </div>
+            <Menu mode="horizontal">
+                <Menu.Item>
+                    <Link href="/"><a>노드버드</a></Link>
+                </Menu.Item>
+                <Menu.Item>
+                    <Link href="/profile"><a>프로필</a></Link>
+                </Menu.Item>
+                <Menu.Item>
+                    <Link href="/signup"><a>회원가입</a></Link>
+                </Menu.Item>
+            </Menu>
             {children}
             {/* {children은 AppLayout 태그 안에 있는 자식 태그이다.} */}
         </div>
     );
 }
 
-AppLayout.propTypes ={
-    children: propTypes.node.isRequired,
+AppLayout.propTypes = {
+    children: PropTypes.node.isRequired,
     // node는 리턴 안에 들어가는 모든 것이다. 화면에 그릴 수 있는 모든것
     // prop 검증
 };
