@@ -1,10 +1,16 @@
 import React from 'react';
 import propTypes from 'prop-types';
+import Link from 'next/link';
+//next에서 제공하는 Link 컴포넌트
 
 const AppLayout =({children})=>{
     return(
         <div>
-            <div>공통 메뉴</div>
+            <div>
+                <Link href="/"><a>노드버드</a></Link>
+                <Link href="/profile"><a>프로필</a></Link>
+                <Link href="/signup"><a>회원가입</a></Link>
+            </div>
             {children}
             {/* {children은 AppLayout 태그 안에 있는 자식 태그이다.} */}
         </div>
