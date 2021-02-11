@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 //next에서 제공하는 Link 컴포넌트
@@ -6,9 +6,13 @@ import { Menu, Input, Row, Col } from 'antd';
 // antd는 ant design으로 중국 디자인 사이트
 // Row Col은 반응형 디자인을 만들기 위해 antd에서 지원
 import 'antd/dist/antd.css'
+import UserProfile from '../components/UserProfile';
+import LoginForm from '../components/LoginForm';
 
 
 const AppLayout = ({ children }) => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    // 서버가 아직 구현되지 않아 만든 임시 데이터
     return (
         <div>
             <Menu mode="horizontal">
@@ -28,7 +32,7 @@ const AppLayout = ({ children }) => {
             <Row gutter={8}>
                 {/* gutter 컬럼사이에 간격을 주는것 */}
                 <Col xs={24} md={6}>
-                    왼쪽 메뉴
+                    {isLoggedIn ? <UserProfile /> : <LoginForm />}
                 </Col>
 
                 <Col xs={24} md={12}>
