@@ -9,7 +9,6 @@
   "author": "Jeong Woon Lee",
   "license": "ISC",
   "dependencies": {
-    "@ant-design/colors": "^5.0.0",
     "@ant-design/icons": "^4.4.0",
     "@ctrl/tinycolor": "^3.3.1",
     "antd": "^4.3.0",
@@ -23,8 +22,6 @@
   "devDependencies": {
     "eslint": "^7.19.0",
     "eslint-plugin-react-hooks": "^4.2.0"
-  },
-  "resolutions": {
-    "@ant-design/colors": "5.0.0"
   }
+  
 }
