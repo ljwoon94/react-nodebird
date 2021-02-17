@@ -8,7 +8,13 @@ import { Menu, Input, Row, Col } from 'antd';
 import 'antd/dist/antd.css'
 import UserProfile from '../components/UserProfile';
 import LoginForm from '../components/LoginForm';
+import styled from 'styled-components';
 
+const SearchInput = styled(Input.Search)`
+    verticalAlign: 'middle';
+`;
+// 컴포넌트에 스타일을 적용하고 싶을때 style{}를 사용하는것보다
+// styled-components를 사용하는것이 좋다.
 
 const AppLayout = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -23,7 +29,7 @@ const AppLayout = ({ children }) => {
                     <Link href="/profile"><a>프로필</a></Link>
                 </Menu.Item>
                 <Menu.Item>
-                    <Input.Search enterButton style={{ verticalAlign: 'middle' }} />
+                    <SearchInput enterButton />
                 </Menu.Item>
                 <Menu.Item>
                     <Link href="/signup"><a>회원가입</a></Link>

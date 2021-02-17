@@ -1,7 +1,15 @@
 import React, { useState, useCallback } from 'react';
 import { Form, Input, Button } from 'antd';
 import Link from 'next/link';
+import styled from 'styled-components';
 
+const ButtonWrapper = styled.div`
+    margin-top: 10px;
+`;
+// styled를 사용하려면 '`' 백틱을 사용해야한다. ~모양에 있다.
+// div 컴포넌트면서 css가 적용된다.
+// 컴포넌트에 스타일을 적용하고 싶을때 style{}를 사용하는것보다
+// styled-components를 사용하는것이 좋다.
 const LoginForm = () => {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
@@ -32,11 +40,11 @@ const LoginForm = () => {
                     required
                 />
             </div>
-            <div>
+            <ButtonWrapper>
                 <Button type="primary" htmlType="submit" loading={false}>로그인</Button>
                 {/* primary 색깔을 담당 */}
                 <Link href="/signup"><a><Button>회원가입</Button></a></Link>
-            </div>
+            </ButtonWrapper>
         </Form>
     );
 }
