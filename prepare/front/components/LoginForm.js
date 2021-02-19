@@ -34,12 +34,12 @@ const LoginForm = ({ setIsLoggedIn }) => {
         <FormWrapper onFinish={onSubmitForm}>
             {/* onFinish는 자동으로 e.preventDefault가 적용되어있다. */}
             <div>
-                <label htmlForm="user-id">아이디</label>
+                <label htmlFor="user-id">아이디</label>
                 <br />
                 <Input name="user-id" value={id} onChange={onChangeId} required />
             </div>
             <div>
-                <label htmlForm="user-password">비밀번호</label>
+                <label htmlFor="user-password">비밀번호</label>
                 <br />
                 <Input
                     name="user-password"
