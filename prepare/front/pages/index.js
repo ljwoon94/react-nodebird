@@ -1,11 +1,19 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+
 import AppLayout from '../components/AppLayout';
 //next에선 import React를 반드시 할 필요가 없다.
 //next는 pages 폴더를 인식해서 개별적으로 페이지로 만든다.
+import PostForm from '../components/PostForm';
+import PostCard from '../components/PostCard';
+
 const Home = () => {
+    const { isLoggedIn } = useSelector((state) => state.user);
+    const { mainPosts } = useSelector((state) => state.post);
     return (
         <AppLayout>
-            <div>Hello, Next!</div>
+            {isLoggedIn && <PostForm />}
+            {mainPosts.map((post) => <PostCard key={post.id} post={post} />)}
         </AppLayout>
         // AppLayout은 components 폴더에 있다.
         // AppLayout 안에 있는 div는 {children}이 된다.
