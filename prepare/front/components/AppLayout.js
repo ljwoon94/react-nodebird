@@ -9,6 +9,8 @@ import 'antd/dist/antd.css'
 import UserProfile from '../components/UserProfile';
 import LoginForm from '../components/LoginForm';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+// react-redux 리액트와 리덕스를 연결해준다.
 
 const SearchInput = styled(Input.Search)`
     verticalAlign: 'middle';
@@ -17,7 +19,8 @@ const SearchInput = styled(Input.Search)`
 // styled-components를 사용하는것이 좋다.
 
 const AppLayout = ({ children }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+    // const [isLoggedIn, setIsLoggedIn] = useState(false);
     // 서버가 아직 구현되지 않아 만든 임시 데이터
     return (
         <div>
@@ -38,7 +41,7 @@ const AppLayout = ({ children }) => {
             <Row gutter={8}>
                 {/* gutter 컬럼사이에 간격을 주는것 */}
                 <Col xs={24} md={6}>
-                    {isLoggedIn ? <UserProfile setIsLoggedIn={setIsLoggedIn} /> : <LoginForm setIsLoggedIn={setIsLoggedIn} />}
+                    {isLoggedIn ? <UserProfile /> : <LoginForm />}
                 </Col>
 
                 <Col xs={24} md={12}>
