@@ -1,3 +1,5 @@
+import { HYDRATE } from 'next-redux-wrapper';
+
 const initialState = {
     user: {
         isLoggedIn: false,
@@ -20,7 +22,7 @@ export const loginAction = (data) => {
 
 export const logoutAction = (data) => {
     return {
-        type: 'LOG-OUT',
+        type: 'LOG_OUT',
         //로그아웃은 데이터가 필요없다.
     }
 }
@@ -29,6 +31,12 @@ export const logoutAction = (data) => {
 //(이전상태, 액션) => 다음상태
 const rootReducer = (state = initialState, action) => {
     switch (action.type) {
+        case HYDRATE:
+            console.log('HYDRATE', action);
+            return {
+                ...state,
+                ...action.payload,
+            };
         case 'LOG_IN':
             return {
                 ...state,
@@ -48,6 +56,7 @@ const rootReducer = (state = initialState, action) => {
                 },
             };
         default: return state;
+        // default: return state;를 안적으면 리턴값이 undifined가 뜬다.
     }
 };
 
