@@ -1,15 +1,18 @@
 import { createWrapper } from 'next-redux-wrapper';
-import { createStore } from 'redux';
+import { applyMiddleware, createStore, compose } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 import reducer from '../reducers';
 
 
 const configureStore = () => {
-    const store = createStore(reducer);
-    store.dispatch({
-        type: 'CHANGE_NICKNAME',
-        data: 'JEONGWOON',
-    })
+    const middlewares = [];
+    const enhancer = process.env.NODE_ENV === 'production'
+        ? compose(applyMiddleware(...middlewares))  //배포용
+        : composeWithDevTools(applyMiddleware(...middlewares))   //개발용
+    const store = createStore(reducer, enhancer);
+    //enhancer 미들웨어 액션기록을 보기위해 사용
+    //redux-devtools-extension
     return store;
 };
 
