@@ -11,7 +11,20 @@ import LoginForm from '../components/LoginForm';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 // react-redux 리액트와 리덕스를 연결해준다.
+import { createGlobalStyle } from 'styled-components';
 
+const Global = createGlobalStyle`
+    .ant-row{
+        margin-right:0!important;
+        margin-left:0!important;
+    }
+    .ant-cool:first-child{
+        padding-left:0!important;
+    }
+    .ant-col:last-child{
+        padding-right:0!important;
+    }
+`;
 const SearchInput = styled(Input.Search)`
     verticalAlign: 'middle';
 `;
@@ -24,6 +37,7 @@ const AppLayout = ({ children }) => {
     // 서버가 아직 구현되지 않아 만든 임시 데이터
     return (
         <div>
+            <Global />
             <Menu mode="horizontal">
                 <Menu.Item>
                     <Link href="/"><a>노드버드</a></Link>
