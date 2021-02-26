@@ -7,11 +7,11 @@ export const initialState = {
         },
         content: '첫 번째 게시글 #해시태크 #익스프레스',
         Images: [{
-            src: '../images/캡처1.jpg',
+            src: 'https://3.bp.blogspot.com/-paIvI6xdE2k/WovHemFi6jI/AAAAAAACN20/6hBeNS_XVO0idJlKvTR_hKhDsaob7pdOgCLcBGAs/s1600/3.gif',
         }, {
-            src: '../images/캡처2.jpg',
+            src: 'https://coinpan.com/files/attach/images/198/013/866/096/b5a203116c9ff0d11a13d9bb43f7bb39.gif',
         }, {
-            src: '../images/캡처3.jpg',
+            src: 'http://t1.daumcdn.net/thumb/R1024x0/?fname=http://cfile271.uf.daum.net/image/276DCA3C5586B77E26FDB2',
         }],
         Comments: [{
             User: {
