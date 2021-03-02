@@ -5,7 +5,7 @@ export default (initialValue = null) => {
     const handler = useCallback((e) => {
         setValue(e.target.value);
     }, []);
-    return [value, handler];
+    return [value, handler, setValue];
 }
 
 // 커스텀 훅으로 계속 반복되는 코드를 만들어둠

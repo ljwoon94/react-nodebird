@@ -1,6 +1,13 @@
 import styled, { createGlobalStyle } from 'styled-components';
 import { CloseOutlined } from '@ant-design/icons';
 
+export const Global = createGlobalStyle`
+    .slick-slide{
+        display:inline-block;
+    }
+    // ant-card-cover는 antd slick 버그를 막기위해 사용
+`;
+
 export const Overlay = styled.div`
     position: fixed;
     z-index:5000;
@@ -57,15 +64,7 @@ export const Indicator = styled.div`
     }
 `;
 
-export const Global = createGlobalStyle`
-    .slick-slide{
-        display:inline-block;
-    }
-    .ant-card-cover{
-        transform:none !important;
-    }
-    // ant-card-cover는 antd slick 버그를 막기위해 사용
-`;
+
 
 export const CloseBtn = styled(CloseOutlined)`
     position: absolute;

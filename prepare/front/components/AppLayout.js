@@ -32,9 +32,8 @@ const SearchInput = styled(Input.Search)`
 // styled-components를 사용하는것이 좋다.
 
 const AppLayout = ({ children }) => {
-    const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-    // const [isLoggedIn, setIsLoggedIn] = useState(false);
-    // 서버가 아직 구현되지 않아 만든 임시 데이터
+    const { me } = useSelector((state) => state.user);
+
     return (
         <div>
             <Global />
@@ -55,7 +54,7 @@ const AppLayout = ({ children }) => {
             <Row gutter={8}>
                 {/* gutter 컬럼사이에 간격을 주는것 */}
                 <Col xs={24} md={6}>
-                    {isLoggedIn ? <UserProfile /> : <LoginForm />}
+                    {me ? <UserProfile /> : <LoginForm />}
                 </Col>
 
                 <Col xs={24} md={12}>
