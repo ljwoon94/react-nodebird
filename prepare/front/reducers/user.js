@@ -1,5 +1,7 @@
 export const initialState = {
-    isLoggedIn: false,
+    isLoggingIn: false, // 로그인 시도중
+    isLoggedIn: false,  // 로그인 유무
+    isLoggingOut: false, // 로그아웃 시도중
     me: null,
     signUpData: {},
     loginData: {},
@@ -49,34 +51,44 @@ export const logoutRequestAction = (data) => {
     }
 }
 
-export const logoutSuccessAction = (data) => {
-    return {
-        type: 'LOG_OUT_SUCCESS',
-        //로그아웃은 데이터가 필요없다.
-    }
-}
-
-export const logoutFailureAction = (data) => {
-    return {
-        type: 'LOG_OUT_FAILURE',
-        //로그아웃은 데이터가 필요없다.
-    }
-}
-
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case 'LOG_IN':
+        case 'LOG_IN_REQUEST':
+            console.log('reducer logIn');
             return {
                 ...state,
-                isLoggedIn: true,
-                me: action.data,
-
+                isLoggingIn: true,
             };
-        case 'LOG_OUT':
+        case 'LOG_IN_SUCCESS':
             return {
                 ...state,
+                isLoggingIn: false,
+                isLoggedIn: true,
+                me: { ...action.data, nickname: 'JeongWoon' },
+            };
+        case 'LOG_IN_FAILURE':
+            return {
+                ...state,
+                isLoggingIn: false,
                 isLoggedIn: false,
+            };
+        case 'LOG_OUT_REQUEST':
+            return {
+                ...state,
+                isLoggingOut: true,
+            };
+        case 'LOG_OUT_SUCCESS':
+            return {
+                ...state,
+                isLoggingOut: false,
+                isLoggedIn: false,
+                me: null,
+            };
+        case 'LOG_OUT_FAILURE':
+            return {
+                ...state,
+                isLoggingOut: false,
                 me: null,
 
             };
