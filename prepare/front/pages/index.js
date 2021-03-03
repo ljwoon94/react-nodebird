@@ -8,17 +8,17 @@ import PostForm from '../components/PostForm';
 import PostCard from '../components/PostCard';
 
 const Home = () => {
-    const { isLoggedIn } = useSelector((state) => state.user);
+    const { me } = useSelector((state) => state.user);
     const { mainPosts } = useSelector((state) => state.post);
     return (
         <AppLayout>
-            {isLoggedIn && <PostForm />}
+            {me && <PostForm />}
             {mainPosts.map((post) => <PostCard key={post.id} post={post} />)}
         </AppLayout>
         // AppLayout은 components 폴더에 있다.
         // AppLayout 안에 있는 div는 {children}이 된다.
     );
-}
+};
 
 export default Home;
 

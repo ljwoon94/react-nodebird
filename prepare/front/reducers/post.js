@@ -23,44 +23,49 @@ export const initialState = {
                 nickname: '쩡훈',
             },
             content: '헝헝헝헝',
-        }]
+        }],
     }],
     imagePaths: [],
     // imagePaths는 이미지 업로드할때 생기는 경로가 저장
-    PostAdded: false,
-    // 개체 추가시 true로 바뀜
-}
+    addPostLoading: false,
+    addPostDone: false,
+    addPostError: null,
+    addCommentLoading: false,
+    addCommentDone: false,
+    addCommentError: null,
+};
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
+
+
+export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
+export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
+export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 
 export const addPost = (data) => ({
     type: ADD_POST_REQUEST,
     data,
 });
 
-const dummyPost = {
-    id: 2,
-    content: '더미데이터 입니다.',
-    User: {
-        id: 1,
-        nickname: '쩡쩡훈'
-    },
-    Images: [],
-    addPostLoading: false,
-    addPostDone: false,
-    addPostError: null,
-};
-
-export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
-export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
-export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
-
 export const addComment = (data) => ({
     type: ADD_COMMENT_REQUEST,
     data,
 });
+
+
+const dummyPost = (data) => ({
+    id: 2,
+    content: data,
+    User: {
+        id: 1,
+        nickname: '쩡쩡훈',
+    },
+    Images: [],
+    Comments: [],
+});
+
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -70,37 +75,39 @@ const reducer = (state = initialState, action) => {
                 addPostLoading: true,
                 addPostDone: false,
                 addPostError: null,
-            }
+            };
         case ADD_POST_SUCCESS:
             return {
                 ...state,
-                mainPosts: [dummyPost, ...state.mainPosts],
+                mainPosts: [dummyPost(action.data), ...state.mainPosts],
                 addPostLoading: false,
                 addPostDone: true,
-            }
+            };
         case ADD_POST_FAILURE:
             return {
-                addCommentLoading: false,
-                addCommentError: action.error,
-            }
+                ...state,
+                addPostLoading: false,
+                addPostError: action.error,
+            };
         case ADD_COMMENT_REQUEST:
             return {
                 ...state,
                 addCommentLoading: true,
                 addCommentDone: false,
                 addCommentError: null,
-            }
+            };
         case ADD_COMMENT_SUCCESS:
             return {
                 ...state,
                 addCommentLoading: false,
                 addCommentDone: true,
-            }
+            };
         case ADD_COMMENT_FAILURE:
             return {
+                ...state,
                 addCommentLoading: false,
                 addCommentError: action.error,
-            }
+            };
 
         default:
             return state;
