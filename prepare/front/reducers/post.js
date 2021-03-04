@@ -56,8 +56,8 @@ export const addComment = (data) => ({
 
 
 const dummyPost = (data) => ({
-    id: 2,
-    content: data,
+    id: data.id,
+    content: data.content,
     User: {
         id: 1,
         nickname: '쩡쩡훈',
@@ -70,6 +70,7 @@ const dummyPost = (data) => ({
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_POST_REQUEST:
+            console.log('reducer post');
             return {
                 ...state,
                 addPostLoading: true,

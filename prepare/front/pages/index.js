@@ -13,10 +13,10 @@ const Home = () => {
     return (
         <AppLayout>
             {me && <PostForm />}
-            {mainPosts.map((post) => <PostCard key={post.id} post={post} />)}
+            {mainPosts.map((post) => (<PostCard key={post.id} post={post} />))}
         </AppLayout>
         // AppLayout은 components 폴더에 있다.
-        // AppLayout 안에 있는 div는 {children}이 된다.
+        // AppLayout 안에 있는 div는 {children}이 된다. 
     );
 };
 
