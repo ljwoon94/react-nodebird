@@ -21,11 +21,11 @@ const PostCard = ({ post }) => {
     }, []);
 
     const onRemovePost = useCallback(() => {
-        dispatech({
+        dispatch({
             type: REMOVE_POST_REQUEST,
             data: post.id,
         });
-    });
+    }, []);
     const id = useSelector((state) => state.user.me?.id);
 
     return (

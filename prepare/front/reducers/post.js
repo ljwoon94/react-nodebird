@@ -75,11 +75,12 @@ export const addComment = (data) => ({
 
 const dummyPost = (data) => ({
     id: data.id,
+    content: data.content,
     User: {
         id: 1,
         nickname: '이정운',
     },
-    content: data.content,
+
     Images: [],
     Comments: [],
 });
