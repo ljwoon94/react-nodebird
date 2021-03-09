@@ -1,15 +1,45 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import AppLayout from '../components/AppLayout';
 //next에선 import React를 반드시 할 필요가 없다.
 //next는 pages 폴더를 인식해서 개별적으로 페이지로 만든다.
 import PostForm from '../components/PostForm';
 import PostCard from '../components/PostCard';
+import { LOAD_POSTS_REQUEST } from '../reducers/post';
 
 const Home = () => {
+    const dispatch = useDispatch();
     const { me } = useSelector((state) => state.user);
-    const { mainPosts } = useSelector((state) => state.post);
+    const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector((state) => state.post);
+
+    useEffect(() => {
+        dispatch({
+            type: LOAD_POSTS_REQUEST,
+        });
+    }, []);
+
+    useEffect(() => {
+        function onScroll() {
+            console.log(window.scrollY, document.documentElement.clientHeight, document.documentElement.scrollHeight);
+            if (windpw.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
+                //끝에서 300픽셀보다 더 내렸을 경우
+                if (hasMorePosts && !loadPostsLoading) {
+                    dispatch({
+                        type: LOAD_POSTS_REQUEST,
+                    });
+                }
+
+            }
+        }
+        window.addEventListener('scroll', onScroll);
+        return () => {
+            window.removeEventListener('scroll', onScroll);
+            //종료하지 않으면 큰일남.
+        };
+    }, [hasMorePosts, loadPostsLoading]);
+    // 스크롤 끝까지 내릴시 로딩 후 이미지 가져오기
+
     return (
         <AppLayout>
             {me && <PostForm />}
