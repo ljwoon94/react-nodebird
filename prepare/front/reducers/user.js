@@ -86,92 +86,91 @@ const dummyUser = (data) => ({
 });
 
 // reducer은 이전 상태를 액션을 통해 다음 상태로 만들어 내는 함수(불변성을 지키면서)
-const reducer = (state = initialState, action) => {
-    return produce(state, (draft) => {
-        switch (action.type) {
-            case LOG_IN_REQUEST:
-                console.log('reducer logIn');
-                draft.logInLoading = true;
-                draft.logInDone = false;
-                draft.logInError = null;
-                break;
-            case LOG_IN_SUCCESS:
-                draft.logInLoading = false;
-                draft.logInDone = true;
-                draft.me = dummyUser(action.data);
-                break;
-            case LOG_IN_FAILURE:
-                draft.logInLoading = false;
-                draft.logInError = action.error;
-                break;
-            case LOG_OUT_REQUEST:
-                draft.logOutLoading = true;
-                draft.logOutDone = false;
-                draft.logOutError = null;
-                break;
-            case LOG_OUT_SUCCESS:
-                draft.logOutLoading = false;
-                draft.logOutDone = true;
-                draft.me = null;
-                break;
-            case LOG_OUT_FAILURE:
-                draft.logOutLoading = false;
-                draft.logOutError = action.error;
-                break;
+const reducer = (state = initialState, action) => produce(state, (draft) => {
+    switch (action.type) {
+        case LOG_IN_REQUEST:
+            console.log('reducer logIn');
+            draft.logInLoading = true;
+            draft.logInDone = false;
+            draft.logInError = null;
+            break;
+        case LOG_IN_SUCCESS:
+            draft.logInLoading = false;
+            draft.logInDone = true;
+            draft.me = dummyUser(action.data);
+            break;
+        case LOG_IN_FAILURE:
+            draft.logInLoading = false;
+            draft.logInError = action.error;
+            break;
+        case LOG_OUT_REQUEST:
+            draft.logOutLoading = true;
+            draft.logOutDone = false;
+            draft.logOutError = null;
+            break;
+        case LOG_OUT_SUCCESS:
+            draft.logOutLoading = false;
+            draft.logOutDone = true;
+            draft.me = null;
+            break;
+        case LOG_OUT_FAILURE:
+            draft.logOutLoading = false;
+            draft.logOutError = action.error;
+            break;
 
-            case SIGN_UP_REQUEST:
-                draft.signUpLoading = true;
-                draft.signUpDone = false;
-                draft.signUpError = null;
-                break;
-            case SIGN_UP_SUCCESS:
-                draft.signUpLoading = false;
-                draft.signUpDone = true;
-                break;
-            case SIGN_UP_FAILURE:
-                draft.signUpLoading = false;
-                draft.signUpError = action.error;
-                break;
+        case SIGN_UP_REQUEST:
+            draft.signUpLoading = true;
+            draft.signUpDone = false;
+            draft.signUpError = null;
+            break;
+        case SIGN_UP_SUCCESS:
+            draft.signUpLoading = false;
+            draft.signUpDone = true;
+            break;
+        case SIGN_UP_FAILURE:
+            draft.signUpLoading = false;
+            draft.signUpError = action.error;
+            break;
 
-            case CHANGE_NICKNAME_REQUEST:
-                draft.changeNicknameLoading = true;
-                draft.changeNicknamepDone = false;
-                draft.changeNicknameError = null;
-                break;
-            case CHANGE_NICKNAME_SUCCESS:
-                draft.changeNicknameLoading = false;
-                draft.changeNicknameDone = true;
-                break;
-            case CHANGE_NICKNAME_FAILURE:
-                draft.changeNicknameLoading = false;
-                draft.changeNicknameError = action.error;
-                break;
-            case ADD_POST_TO_ME:
-                draft.me.Posts.unshift({ id: action.data });
-                break;
-            // immer를 사용하면 위에 처럼 줄일 수 있다.
-            // return {
-            //     ...state,
-            //     me: {
-            //         ...state.me,
-            //         Posts: [{ id: action.data }, ...state.me.Posts],
-            //     },
-            // };
-            case REMOVE_POST_OF_ME:
-                draft.me.Posts = draft.me.Posts.filter((v) => v.id !== action.data);
-                break;
-            // immer를 사용하면 위에 처럼 줄일 수 있다.
-            // return {
-            //     ...state,
-            //     me: {
-            //         ...state.me,
-            //         Posts: state.me.Posts.filter((v) => v.id !== action.data),
-            //     },
-            // };
-            default:
-                break;
-        }
-    });
-};
+        case CHANGE_NICKNAME_REQUEST:
+            draft.changeNicknameLoading = true;
+            draft.changeNicknamepDone = false;
+            draft.changeNicknameError = null;
+            break;
+        case CHANGE_NICKNAME_SUCCESS:
+            draft.changeNicknameLoading = false;
+            draft.changeNicknameDone = true;
+            break;
+        case CHANGE_NICKNAME_FAILURE:
+            draft.changeNicknameLoading = false;
+            draft.changeNicknameError = action.error;
+            break;
+        case ADD_POST_TO_ME:
+            draft.me.Posts.unshift({ id: action.data });
+            break;
+        // immer를 사용하면 위에 처럼 줄일 수 있다.
+        // return {
+        //     ...state,
+        //     me: {
+        //         ...state.me,
+        //         Posts: [{ id: action.data }, ...state.me.Posts],
+        //     },
+        // };
+        case REMOVE_POST_OF_ME:
+            draft.me.Posts = draft.me.Posts.filter((v) => v.id !== action.data);
+            break;
+        // immer를 사용하면 위에 처럼 줄일 수 있다.
+        // return {
+        //     ...state,
+        //     me: {
+        //         ...state.me,
+        //         Posts: state.me.Posts.filter((v) => v.id !== action.data),
+        //     },
+        // };
+        default:
+            break;
+    }
+});
+
 
 export default reducer;

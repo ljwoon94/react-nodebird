@@ -37,7 +37,7 @@ const Home = () => {
             window.removeEventListener('scroll', onScroll);
             //종료하지 않으면 큰일남.
         };
-    }, [hasMorePosts, loadPostsLoading]);
+    }, [mainPosts, hasMorePosts, loadPostsLoading]);
     // 스크롤 끝까지 내릴시 로딩 후 이미지 가져오기
 
     return (

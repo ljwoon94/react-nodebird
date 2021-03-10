@@ -18,7 +18,6 @@ function* loadPosts(action) {
         //const result = yield call(addPostAPI, action.data);
         console.log('saga post');
         yield delay(1000);
-        const id = shortId.generate();
         yield put({
             type: LOAD_POSTS_SUCCESS,
             data: generateDumyPost(10),
