@@ -133,14 +133,12 @@ const dummyComment = (data) => ({
 const reducer = (state = initialState, action) => produce(state, (draft) => {
     switch (action.type) {
         case LOAD_POSTS_REQUEST:
-            console.log('reducer post');
             draft.loadPostsLoading = true;
             draft.loadPostsDone = false;
             draft.loadPostsError = null;
             break;
         case LOAD_POSTS_SUCCESS:
             draft.mainPosts = action.data.concat(draft.mainPosts);
-            //concat 합치기
             draft.loadPostsLoading = false;
             draft.loadPostsDone = true;
             draft.hasMorePosts = drafe.mainPosts.length < 50;
