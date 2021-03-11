@@ -21,7 +21,7 @@ const Home = () => {
 
     useEffect(() => {
         function onScroll() {
-            if (windpw.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
+            if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
                 //끝에서 300픽셀보다 더 내렸을 경우
                 if (hasMorePosts && !loadPostsLoading) {
                     dispatch({
