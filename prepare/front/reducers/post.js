@@ -94,9 +94,6 @@ export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 
-export const ADD_POST_TO_ME = 'ADD_PPOST_TO_ME';
-export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
-
 export const addPost = (data) => ({
     type: ADD_POST_REQUEST,
     data,
@@ -133,15 +130,17 @@ const dummyComment = (data) => ({
 const reducer = (state = initialState, action) => produce(state, (draft) => {
     switch (action.type) {
         case LOAD_POSTS_REQUEST:
+            console.log('reducer post');
             draft.loadPostsLoading = true;
             draft.loadPostsDone = false;
             draft.loadPostsError = null;
             break;
         case LOAD_POSTS_SUCCESS:
             draft.mainPosts = action.data.concat(draft.mainPosts);
+            //concat 합치기
             draft.loadPostsLoading = false;
             draft.loadPostsDone = true;
-            draft.hasMorePosts = drafe.mainPosts.length < 50;
+            draft.hasMorePosts = draft.mainPosts.length < 50;
             break;
         case LOAD_POSTS_FAILURE:
             draft.loadPostsLoading = false;
