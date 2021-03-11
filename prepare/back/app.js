@@ -1,36 +1,56 @@
-const http = require('http');
-//노드가 http 모듈 제공
-const server = http.createServer((req, res)=>{
-    console.log(req.url, res.method);
+const express = require('express');
+const postRouter = require('./routes/post');
+// import from과 같다.
+const app =express();
 
-    if(req.method==='GET'){
-        if(req.url==='/api/posts'){
-
-        }
-    }   else if(req.method==='POST'){
-        if(req.url ==='/api/post'){
-
-        }
-    }   else if(req.method==='DELETE'){
-        if(req.url ==='/api/delete'){
-            
-        }
-    }
-
-
-    res.write('<h1>Hello node1</h1>');
-    //res.write 응답. end는 마지막에 쓴다.
-    //html 사용가능
-    res.write('<h2>Hello node2</h2>');
-    res.write('<h3>Hello node3</h3>');
-    res.write('<h4>Hello node4</h4>');
-    res.end("<h5>Hello node5</h5>");
+app.get('/', (req,res)=>{
+    res.send('hello express');
+    //http는 res.write이지만 express는 send다.
 });
-server.listen(3065, ()=>{
+
+app.get('/', (req,res)=>{
+    res.send('hello api');
+});
+
+app.get('/posts', (req,res)=>{
+    res.json([
+        {id:1, content:'hello'},
+        {id:2, content:'hello2'},
+        {id:3, content:'hello3'},
+    ]);
+    //데이터는 json으로 표현
+});
+
+app.use('/post',postRouter);
+//app.use('/중복되는 url',postRouter);
+
+app.listen(3065,()=>{
     console.log('서버 실행 중');
 });
+
+
+//노드가 http 모듈 제공
 // http가 서버역할을 해줌
 // 프로젝트를 시작할땐 npm init을 터미널에 입력
 // packege.js 를 만들어야한다.
 // node app.js로 실행
 // 실행하면 favicon.ico가 나오는데 url옆에 있는 아이콘이다.
+// postman 다운받으면 좋을일 많다.
+
+
+// app.get -> 가져오다.
+// app.post -> 생성하다 애매하면 post 쓰자!
+// app.put -> 전체 수정
+// app.delete -> 제거
+// app.patch -> 부분 수정
+// app.options -> 찔러보기
+// app.head -> 헤더만 가져오기
+
+
+// npm i sequelize sequelize-cli mysql2
+// sequelize 자바스크립트를 sql로 바꿔주는 도구
+// mysql2 node랑 mysql를 연결해주는 드라이버
+// mysql를 코드로 다룬다.
+// npx sequelize init을 하면 시퀄라이즈 세팅이 된다
+// config에서 config.json에 mysql 비밀번호, database 이름 삽입
+// "port":"3306"도 넣어둬라
