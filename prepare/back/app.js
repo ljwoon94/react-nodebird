@@ -1,7 +1,13 @@
 const express = require('express');
 const postRouter = require('./routes/post');
 // import from과 같다.
+const db = require('./models');
 const app =express();
+db.sequelize.sync()
+    .then(()=>{
+        console.log('db 연결 성공');
+    })
+    .catch(console.error);
 
 app.get('/', (req,res)=>{
     res.send('hello express');
@@ -54,3 +60,13 @@ app.listen(3065,()=>{
 // npx sequelize init을 하면 시퀄라이즈 세팅이 된다
 // config에서 config.json에 mysql 비밀번호, database 이름 삽입
 // "port":"3306"도 넣어둬라
+
+// npx sequelize db:create
+// db생성
+// node app 싱행
+
+// npm i --D nodemon@2
+// 코드 변동 시 자동으로 서버 재실행
+// package.json에서 scripts "dev":"nodemon app" 추가
+// nodemoon app
+// npm run dev
