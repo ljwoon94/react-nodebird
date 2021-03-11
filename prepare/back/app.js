@@ -1,5 +1,6 @@
 const express = require('express');
 const postRouter = require('./routes/post');
+const userRouter = require('./routes/user');
 // import from과 같다.
 const db = require('./models');
 const app =express();
@@ -8,6 +9,11 @@ db.sequelize.sync()
         console.log('db 연결 성공');
     })
     .catch(console.error);
+
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+//사가에서 받아온 인자값을 req에 넣어둠
+//위에서 부터 아래로 해석되기 땜에 위에 urlencoded가 있어야한다.
 
 app.get('/', (req,res)=>{
     res.send('hello express');
@@ -29,7 +35,8 @@ app.get('/posts', (req,res)=>{
 
 app.use('/post',postRouter);
 //app.use('/중복되는 url',postRouter);
-
+app.use('/user',userRouter);
+//
 app.listen(3065,()=>{
     console.log('서버 실행 중');
 });

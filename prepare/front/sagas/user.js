@@ -1,4 +1,4 @@
-import { all, delay, fork, put, takeLatest } from "redux-saga/effects";
+import { all, call, delay, fork, put, takeLatest } from "redux-saga/effects";
 import { FOLLOW_FAILURE, FOLLOW_REQUEST, FOLLOW_SUCCESS, LOG_IN_FAILURE, LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_OUT_FAILURE, LOG_OUT_REQUEST, LOG_OUT_SUCCESS, SIGN_UP_FAILURE, SIGN_UP_REQUEST, SIGN_UP_SUCCESS, UNFOLLOW_FAILURE, UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS } from "../reducers/user";
 
 function followAPI() {
@@ -90,15 +90,17 @@ function* logOut() {
     }
 }
 
-function signUpAPI() {
-    return axios.post('/api/signUp');
+function signUpAPI(data) {
+    return axios.post('http://localhost:3065/user', data);
 }
 
-function* signUp() {
+function* signUp(action) {
     try {
-
-        //const result = yield call(signUpAPI);
-        yield delay(1000);
+        const result = yield call(signUpAPI, action.data);
+        //작동순서 프론트 pages의 onSubmit에 데이터(아이디, 닉네임, 비밀번호)가
+        //SIGNUPREQ 를 통해 리덕스랑 사가 실행, 데이터 함수는 action으로가
+        //signUpAPI의 데이터로 이동 url을 통해 전송
+        console.log(result);
         yield put({
             type: SIGN_UP_SUCCESS,
         });
