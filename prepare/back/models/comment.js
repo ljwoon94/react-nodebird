@@ -5,10 +5,15 @@ module.exports =(sequelize, DataTypes)=>{
             type:DataTypes.TEXT,
             allowNull:false,
         },
+        // User_id:{}
+        // Post_id:{}
     }, {
         charaset:'utf8mb4', //mb4는 이모티콘 추가
         collate:'utf8mb4_general_ci', //한글 저장       
     });
-    Comment.associate=(db)=>{};
+    Comment.associate=(db)=>{
+        db.Comment.belongsTo(db.User);
+        db.Comment.belongsTo(db.Post);
+    };
     return Comment;
 };
