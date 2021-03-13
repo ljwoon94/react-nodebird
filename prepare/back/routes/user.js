@@ -25,6 +25,7 @@ router.post('/', async (req, res, next) =>{ // POST /user/
             //사가에서 받아옴
         });
         //async await 비동기 함수 순서대로 진행해야해서 써야함.
+        res.setHeader('Access-Control-Allow-Origin','*')
         res.status(200).send('ok');
         //요청 성공시 status(200) 실패시 status(403)
     } catch (error) {

@@ -1,8 +1,12 @@
 const express = require('express');
+const cors = require('cors');
+//미들웨어 브라우저가 서버를 차단하는걸 막음 전부차단하지 않음,
+
 const postRouter = require('./routes/post');
 const userRouter = require('./routes/user');
 // import from과 같다.
 const db = require('./models');
+
 const app =express();
 db.sequelize.sync()
     .then(()=>{
@@ -10,6 +14,11 @@ db.sequelize.sync()
     })
     .catch(console.error);
 
+app.use(cors({
+    origin: '*',
+    credentials:false,
+}));
+//브라우저의 요청을 *은 전부 허용 평소엔 백서버만 허용하게함.    
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 //사가에서 받아온 인자값을 req에 넣어둠
