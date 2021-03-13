@@ -16,7 +16,6 @@ db.sequelize.sync()
 
 app.use(cors({
     origin: '*',
-    credentials:false,
 }));
 //브라우저의 요청을 *은 전부 허용 평소엔 백서버만 허용하게함.    
 app.use(express.json());

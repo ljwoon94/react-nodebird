@@ -16,12 +16,12 @@ router.post('/', async (req, res, next) =>{ // POST /user/
         if (exUser) {
             return res.status(403).send('이미 사용 중인 아이디 입니다.');
         }
-        const hashedPassword = await bcrypt.hash(reg.body.password, 10);
+        const hashedPassword = await bcrypt.hash(req.body.password, 12);
         // 비밀번호 암호화
         await User.create({
             email: req.body.email,
             nickname: req.body.nickname,
-            password: req.body.password,
+            password: hashedPassword,
             //사가에서 받아옴
         });
         //async await 비동기 함수 순서대로 진행해야해서 써야함.
