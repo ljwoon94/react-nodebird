@@ -1,7 +1,8 @@
 const express = require('express');
-const {User} = require('../models'); // db에 있는 User을 가져옴
+const {User, Post} = require('../models'); // db에 있는 User을 가져옴
 const bcrypt = require('bcrypt');
 const passport = require('passport');
+const db = require('../models');
 
 const router = express.Router();
 
@@ -20,8 +21,24 @@ router.post('/login',(req, res, next)=>{
                 console.error(loginErr);
                 return next(loginErr);
             }
-            // res.setHeader('Cookie','cxlhy')
-            return res.status(200).json(user);
+            const fullUserWithoutPassword = await User.findOne({
+                where: {id : user.id},
+                attributes:{
+                    exclude:['password']
+                },
+                //전체 데이터 중 password만 가져오지 않겠다.
+                include:[{
+                    model: Post,
+                },{
+                    model: User,
+                    as: 'Followings',
+                },{
+                    model: User,
+                    as:'Followers',
+                }]
+                //as를 썻으면 model에 user.js에도 ad 넣어준다.
+            })
+            return res.status(200).json(fullUserWithoutPassword);
         });  
     })(req,res,next);
 });
@@ -57,7 +74,7 @@ router.post('/', async (req, res, next) =>{ // POST /user/
     }
 });
 
-router.post('/user/logout',(req,res)=>{
+router.post('/logout',(req,res)=>{
     console.log(req.user);
     req.logOut();
     req.session.destroy();

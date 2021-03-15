@@ -15,7 +15,7 @@ const ErrorMessage = styled.div`
 
 const Signup = () => {
     const dispatch = useDispatch();
-    const { signUpLoading, signUpDone ,signUpError } = useSelector((state) => state.user);
+    const { signUpLoading, signUpDone ,signUpError ,me} = useSelector((state) => state.user);
     const [email, onChangeEmail] = useInput('');
     const [nickname, onChangeNickname] = useInput('');
     const [password, onChangePassword] = useInput('');
@@ -25,14 +25,24 @@ const Signup = () => {
     //     setId(e.target.value);
     // }, []);
 
+    useEffect(() => {
+        if (me && me.id) {
+            Router.replace('/');
+            //이전 페이지로 돌아가기
+        }
+    }, [me && me.id]);
+    
+
     useEffect(()=>{
         if(signUpDone){
-            Router.push('/');
+            Router.replace('/');
         }
     },[signUpDone]);
 
     useEffect(()=>{
-        alert(signUpError);
+        if(signUpError){
+            alert(signUpError);
+        }
     },[signUpError]);
 
     

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, {  useCallback, useEffect } from 'react';
 import { Form, Input, Button } from 'antd';
 import Link from 'next/link';
 import styled from 'styled-components';
@@ -19,10 +19,16 @@ const FormWrapper = styled(Form)`
 // styled-components를 사용하는것이 좋다.
 const LoginForm = () => {
     const dispatch = useDispatch();
-    const { logInLoading } = useSelector((state) => state.user);
+    const { logInLoading, logInError} = useSelector((state) => state.user);
     const [email, onChangeEmail] = useInput('');
     const [password, onChangePassword] = useInput('');
     // 커스텀 훅을 사용 중복되는 코드 최소화 hooks/useInput.js
+
+    useEffect(()=>{
+        if(logInError){
+            alert(logInError);
+        }
+    },[logInError]);
 
     const onSubmitForm = useCallback(() => {
         console.log(email, password);
