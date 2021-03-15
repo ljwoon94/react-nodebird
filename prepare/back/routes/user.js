@@ -1,8 +1,31 @@
 const express = require('express');
 const {User} = require('../models'); // db에 있는 User을 가져옴
 const bcrypt = require('bcrypt');
+const passport = require('passport');
 
 const router = express.Router();
+
+router.post('/login',(req, res, next)=>{
+    //미들웨어 확장법
+    passport.authenticate('local',(err,user,info)=>{
+        if (err){
+            console.error(err);
+            return next(err);
+        }
+        if (info){
+            return res.status(401).send(info.reason);
+        }
+        return req.login(user, async (loginErr)=>{
+            if(loginErr){
+                console.error(loginErr);
+                return next(loginErr);
+            }
+            // res.setHeader('Cookie','cxlhy')
+            return res.status(200).json(user);
+        });  
+    })(req,res,next);
+});
+//로그인 전략 실행
 
 router.post('/', async (req, res, next) =>{ // POST /user/
     try {
@@ -32,6 +55,13 @@ router.post('/', async (req, res, next) =>{ // POST /user/
         console.error(error);
         next(error); //status 500 에러
     }
+});
+
+router.post('/user/logout',(req,res)=>{
+    console.log(req.user);
+    req.logOut();
+    req.session.destroy();
+    res.send('ok');
 });
 
 module.exports = router;

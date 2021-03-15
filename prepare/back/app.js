@@ -1,18 +1,26 @@
 const express = require('express');
 const cors = require('cors');
 //미들웨어 브라우저가 서버를 차단하는걸 막음 전부차단하지 않음,
-
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+//npm i cookie-parser
 const postRouter = require('./routes/post');
 const userRouter = require('./routes/user');
 // import from과 같다.
 const db = require('./models');
+const passportConfig = require('./passport');
+const passport = require('passport');
+const dotenv = require('dotenv');
 
+dotenv.config();
+//.env에 정의된 변수를 가지고 온다..
 const app =express();
 db.sequelize.sync()
     .then(()=>{
         console.log('db 연결 성공');
     })
     .catch(console.error);
+passportConfig();
 
 app.use(cors({
     origin: '*',
@@ -22,6 +30,18 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 //사가에서 받아온 인자값을 req에 넣어둠
 //위에서 부터 아래로 해석되기 땜에 위에 urlencoded가 있어야한다.
+app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(session({
+    saveUninitialized: false,
+    resave: false,
+    secret: process.env.COOKIE_SECRET,
+}));
+// npm i express-session
+// 세션관리
+// npm i dotenv
+// 비밀번호 관리 back 폴더에 .env폴더 생성 숨길 변수를 적어둬라
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.get('/', (req,res)=>{
     res.send('hello express');
