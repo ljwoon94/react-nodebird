@@ -1,6 +1,9 @@
 import produce from 'immer';
 
 export const initialState = {
+    loadMyInfoLoading: false, //유저정보 가져오기
+    loadMyInfoDone: false,
+    loadMyInfoError: null,
     followLoading: false, // 팔로우 시도중
     followDone: false,  // 팔로우 유무
     followError: null,
@@ -23,6 +26,10 @@ export const initialState = {
     signUpData: {},
     loginData: {},
 };
+
+export const LOAD_MY_INFO_REQUEST = 'LOAD_MY_INFO_REQUEST';
+export const LOAD_MY_INFO_SUCCESS = 'LOAD_MY_INFO_SUCCESS';
+export const LOAD_MY_INFO_FAILURE = 'LOAD_MY_INFO_FAILURE';
 
 
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
@@ -96,6 +103,21 @@ const dummyUser = (data) => ({
 // reducer은 이전 상태를 액션을 통해 다음 상태로 만들어 내는 함수(불변성을 지키면서)
 const reducer = (state = initialState, action) => produce(state, (draft) => {
     switch (action.type) {
+        case LOAD_MY_INFO_REQUEST:
+            draft.loadMyInfoLoading = true;
+            draft.loadMyInfoDone = false;
+            draft.loadMyInfoError = null;
+            break;
+        case LOAD_MY_INFO_SUCCESS:
+            draft.loadMyInfoLoading = false;
+            draft.loadMyInfoDone = true;
+            draft.me = action.data;
+            break;
+        case LOAD_MY_INFO_FAILURE:
+            draft.loadMyInfoLoading = false;
+            draft.loadMyInfoError = action.error;
+            break;
+        
         case FOLLOW_REQUEST:
             draft.followLoading = true;
             draft.followDone = false;

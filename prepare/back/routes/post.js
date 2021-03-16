@@ -1,11 +1,11 @@
 const express = require('express');
 
-const {Postm Image, Comment, User} = require('../models');
+const {Post, Image, Comment, User} = require('../models');
 const {isLoggedIn} = require('./middlewares');
 
 const router = express.Router();
 
-router.post('/', isLoggedIn,async (req,res,next)=>{ //POST /post
+router.post('/', isLoggedIn, async (req,res,next)=>{ //POST /post
     try {
         const post = await Post.create({
             content: req.body.content,
@@ -33,7 +33,7 @@ router.delete('/', (req,res)=>{ //DELETE /post
     res.json({id:1});
 });
 
-module.exports = router;
+
 
 router.post('/:postId/comment', isLoggedIn,async (req,res,next)=>{ //POST /post/comment
     try {
@@ -55,3 +55,5 @@ router.post('/:postId/comment', isLoggedIn,async (req,res,next)=>{ //POST /post/
     }
     
 });
+
+module.exports = router;

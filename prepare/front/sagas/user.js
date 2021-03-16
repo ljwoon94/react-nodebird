@@ -1,6 +1,32 @@
 import { all, call, delay, fork, put, takeLatest } from "redux-saga/effects";
-import { FOLLOW_FAILURE, FOLLOW_REQUEST, FOLLOW_SUCCESS, LOG_IN_FAILURE, LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_OUT_FAILURE, LOG_OUT_REQUEST, LOG_OUT_SUCCESS, SIGN_UP_FAILURE, SIGN_UP_REQUEST, SIGN_UP_SUCCESS, UNFOLLOW_FAILURE, UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS } from "../reducers/user";
+import { FOLLOW_FAILURE, FOLLOW_REQUEST, FOLLOW_SUCCESS, LOAD_MY_INFO_FAILURE, LOAD_MY_INFO_REQUEST, LOAD_MY_INFO_SUCCESS, LOG_IN_FAILURE, LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_OUT_FAILURE, LOG_OUT_REQUEST, LOG_OUT_SUCCESS, SIGN_UP_FAILURE, SIGN_UP_REQUEST, SIGN_UP_SUCCESS, UNFOLLOW_FAILURE, UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS } from "../reducers/user";
 import axios from 'axios';
+
+function loadMyInfoAPI() {
+    return axios.post('/user');
+}
+
+function* loadMyInfo(action) {
+    try {
+        console.log('saga loadMyInfo');
+        const result = yield call(loadMyInfoAPI, action.data);
+        //() 인자엔 첫번째는 함수 그 인후론 매게변수들 넣음. 
+        // npm i passport passport-local 로그인를 다루는 미들웨어
+        yield put({
+            type: LOAD_MY_INFO_SUCCESS,
+            data: result.data,
+        });
+    } catch (err) {
+        yield put({
+            type: LOAD_MY_INFO_FAILURE,
+            error: err.response.data,
+        });
+    }
+
+    // 성공결과는 result.data
+    // 실패결과는 err.response.data
+    // put은 디스패치라 생각하면 좋다
+}
 
 function followAPI() {
     return axios.post('/api/follow');
@@ -112,6 +138,10 @@ function* signUp(action) {
     }
 }
 
+
+function* watchLoadMyInfo() {
+    yield takeLatest(LOAD_MY_INFO_REQUEST, loadMyInfo);
+}
 function* watchFollow() {
     yield takeLatest(FOLLOW_REQUEST, follow);
 }
@@ -133,6 +163,7 @@ function* watchSignUp() {
 
 export default function* userSaga() {
     yield all([
+        fork(watchLoadMyInfo),
         fork(watchFollow),
         fork(watchUnfollow),
         fork(watchLogIn),

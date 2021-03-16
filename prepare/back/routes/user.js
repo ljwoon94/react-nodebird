@@ -7,6 +7,40 @@ const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 
 const router = express.Router();
 
+router.get('/', async (req,res,next)=>{ //GET /user
+    try { 
+        if(req.user){
+            const fullUserWithoutPassword = await User.findOne({
+                where: {id : req.user.id},
+                attributes:{
+                    exclude:['password']
+                },
+                //전체 데이터 중 password만 가져오지 않겠다.
+                include:[{
+                    model: Post,
+                },{
+                    model: User,
+                    as: 'Followings',
+                    attributes:['id'],
+                },{
+                    model: User,
+                    as:'Followers',
+                    attributes:['id'],
+                }]
+                //as를 썻으면 model에 user.js에도 ad 넣어준다.
+                //팔로워 데이터 다 가져오면 엄청 무거우니깐 id만 가져왕
+            })
+            res.status(200).json(fullUserWithoutPassword);
+        } else {
+            res.status(200).json(null);
+        }
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+
+});
+
 router.post('/login',isNotLoggedIn, (req, res, next)=>{
     //미들웨어 확장법
     passport.authenticate('local',(err,user,info)=>{
@@ -30,12 +64,15 @@ router.post('/login',isNotLoggedIn, (req, res, next)=>{
                 //전체 데이터 중 password만 가져오지 않겠다.
                 include:[{
                     model: Post,
+                    attributes:['id'],
                 },{
                     model: User,
                     as: 'Followings',
+                    attributes:['id'],
                 },{
                     model: User,
                     as:'Followers',
+                    attributes:['id'],
                 }]
                 //as를 썻으면 model에 user.js에도 ad 넣어준다.
             })
@@ -66,8 +103,7 @@ router.post('/', isNotLoggedIn, async (req, res, next) =>{ // POST /user/
             //사가에서 받아옴
         });
         //async await 비동기 함수 순서대로 진행해야해서 써야함.
-        res.setHeader('Access-Control-Allow-Origin','*')
-        res.status(200).send('ok');
+        res.status(201).send('ok');
         //요청 성공시 status(200) 실패시 status(403)
     } catch (error) {
         console.error(error);
