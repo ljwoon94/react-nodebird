@@ -65,10 +65,10 @@ app.use('/post',postRouter);
 //app.use('/중복되는 url',postRouter);
 app.use('/user',userRouter);
 
-app.use((err,req,res,next)=>{
+// app.use((err,req,res,next)=>{
 
-});
-//에러처리 미들웨어 기본적으로 되어있으나 수정하고 싶을 경우 사용
+// });
+// //에러처리 미들웨어 기본적으로 되어있으나 수정하고 싶을 경우 사용
 app.listen(3065,()=>{
     console.log('서버 실행 중');
 });
