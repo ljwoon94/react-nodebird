@@ -6,7 +6,8 @@ import userSaga from './user';
 
 axios.defaults.baseURL = 'http://localhost:3065';
 //sagas 의 post url를 등록
-
+axios.defaults.withCredentials = true;
+//쿠기 전달 허용 이제 saga에 공통적으로 적용된다.
 export default function* rootSaga() {
     yield all([
         //all은 함수를 동시에 실행시킴

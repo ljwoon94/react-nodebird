@@ -23,9 +23,11 @@ db.sequelize.sync()
 passportConfig();
 
 app.use(cors({
-    origin: '*',
+    origin: 'http://localhost:3060',
+    credentials: true,
 }));
-//브라우저의 요청을 *은 전부 허용 평소엔 백서버만 허용하게함.    
+//브라우저의 요청을 *은 전부 허용 평소엔 백서버만 허용하게함. 
+//credentials: true, 쿠키전달 허용   
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 //사가에서 받아온 인자값을 req에 넣어둠
