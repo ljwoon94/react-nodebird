@@ -3,7 +3,7 @@ import { FOLLOW_FAILURE, FOLLOW_REQUEST, FOLLOW_SUCCESS, LOAD_MY_INFO_FAILURE, L
 import axios from 'axios';
 
 function loadMyInfoAPI() {
-    return axios.post('/user');
+    return axios.get('/user');
 }
 
 function* loadMyInfo(action) {
