@@ -3,10 +3,11 @@ const {User, Post} = require('../models'); // db에 있는 User을 가져옴
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const db = require('../models');
+const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 
 const router = express.Router();
 
-router.post('/login',(req, res, next)=>{
+router.post('/login',isNotLoggedIn, (req, res, next)=>{
     //미들웨어 확장법
     passport.authenticate('local',(err,user,info)=>{
         if (err){
@@ -44,7 +45,7 @@ router.post('/login',(req, res, next)=>{
 });
 //로그인 전략 실행
 
-router.post('/', async (req, res, next) =>{ // POST /user/
+router.post('/', isNotLoggedIn, async (req, res, next) =>{ // POST /user/
     try {
         const exUser = await User.findOne({
             where: {
@@ -74,7 +75,7 @@ router.post('/', async (req, res, next) =>{ // POST /user/
     }
 });
 
-router.post('/logout',(req,res)=>{
+router.post('/logout',isLoggedIn, (req,res)=>{
     console.log(req.user);
     req.logOut();
     req.session.destroy();
