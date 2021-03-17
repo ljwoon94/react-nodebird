@@ -21,7 +21,7 @@ router.post('/', isLoggedIn, async (req,res,next)=>{ //POST /post
                     model:User, //댓글 작성자
                     attributes:['id','nickname'],
                 }],
-            },{
+            }, { 
                 model: User, //게시글 작성자
                 attributes:['id','nickname'],
             }, {
@@ -65,7 +65,7 @@ router.post('/:postId/comment', isLoggedIn,async (req,res,next)=>{ //POST /post/
     }
 });
 
-router.patch('/:postId/like',async (req,res,next)=>{ //PATCH /post/1/likes
+router.patch('/:postId/like',isLoggedIn, async (req,res,next)=>{ //PATCH /post/1/likes
     try {
         const post = await Post.findOne({ where: {id: req.params.postId}});
         if(!post){
@@ -80,7 +80,7 @@ router.patch('/:postId/like',async (req,res,next)=>{ //PATCH /post/1/likes
     }
 });
 
-router.delete('/:postId/like',async (req,res,next)=>{ //DELETE /post/1/like
+router.delete('/:postId/like', isLoggedIn, async (req,res,next)=>{ //DELETE /post/1/like
     try {
         const post = await Post.findOne({ where: {id: req.params.postId}});
         if(!post){
@@ -95,8 +95,20 @@ router.delete('/:postId/like',async (req,res,next)=>{ //DELETE /post/1/like
     }
 });
 
-router.delete('/', (req,res)=>{ //DELETE /post
-    res.json({id:1});
+router.delete('/:postId', isLoggedIn, async (req, res, next)=>{ //DELETE /post
+    try {
+        await Post.destroy({
+            where: {
+                id: req.params.postId,
+                UserId: req.user.id,
+            },
+        });
+        //시퀄라이즈에서 제거할땐 destroy를 쓴다 
+        res.status(200).json({PostId: parseInt(req.params.postId, 10)});
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
 });
 
 

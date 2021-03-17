@@ -118,6 +118,22 @@ router.post('/logout',isLoggedIn, (req,res)=>{
     res.send('ok');
 });
 
+router.patch('/nickname', isLoggedIn, async(req, res, next)=>{
+    try {
+        await User.update({
+            nickname: req.body.nickname,
+        },{
+            where: {id: req.user.id},
+        });
+        res.status(200).json({nickname: req.body.nickname});
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
+router.patch
+
 module.exports = router;
 
 //npm i bcrypt 비밀번호 암호화 라이브러리

@@ -104,18 +104,16 @@ function* addPost(action) {
 }
 
 function removePostAPI(data) {
-    return axios.post('/api/removePost', data);
+    return axios.delete(`/post/${data}`);
 }
 
 function* removePost(action) {
     try {
-        //const result = yield call(removePostAPI, action.data);
+        const result = yield call(removePostAPI, action.data);
         console.log('saga post');
-        yield delay(1000);
-        const id = shortId.generate();
         yield put({
             type: REMOVE_POST_SUCCESS,
-            data: action.data,
+            data: result.data,
         });
         yield put({
             type: REMOVE_POST_OF_ME,

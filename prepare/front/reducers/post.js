@@ -219,7 +219,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
             draft.removePostError = null;
             break;
         case REMOVE_POST_SUCCESS:
-            draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data);
+            draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data.PostId);
             //불변성을 안지키는 거면 draft(immer)을 안쓰는것이 좋다.
             draft.removePostLoading = false;
             draft.removePostDone = true;
