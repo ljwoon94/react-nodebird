@@ -22,7 +22,11 @@ router.get('/', async (req, res, next)=>{ //GET /posts //여러개 가져오는 
                 include: [{
                     model: User,
                     attributes: ['id','nickname'],
-                }]
+                }],
+            }, {
+                model:User, //좋아요 누른 사람
+                as: 'Likers',
+                attributes:['id'],
             }],
         }); 
         // findAll()모든 게시물 불러옴
