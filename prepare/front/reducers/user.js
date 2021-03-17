@@ -19,6 +19,12 @@ export const initialState = {
     signUpLoading: false, // 회원가입 시도중
     signUpDone: false,  //
     signUpError: null, //
+    loadFollowersLoading: false, // 팔로워 표시 시도중
+    loadFollowersDone: false,  //
+    loadFollowersError: null, //
+    loadFollowingsLoading: false, // 팔로잉 표시 시도중
+    loadFollowingsDone: false,  //
+    loadFollowingsError: null, //
     changeNicknameLoading: false, //닉네임 변경 시도중
     changeNicknameDone: false,  //
     changeNicknameError: null, //
@@ -27,10 +33,17 @@ export const initialState = {
     loginData: {},
 };
 
+export const LOAD_FOLLOWERS_REQUEST = 'LOAD_FOLLOWERS_REQUEST';
+export const LOAD_FOLLOWERS_SUCCESS = 'LOAD_FOLLOWERS_SUCCESS';
+export const LOAD_FOLLOWERS_FAILURE = 'LOAD_FOLLOWERS_FAILURE';
+
+export const LOAD_FOLLOWINGS_REQUEST = 'LOAD_FOLLOWINGS_REQUEST';
+export const LOAD_FOLLOWINGS_SUCCESS = 'LOAD_FOLLOWINGS_SUCCESS';
+export const LOAD_FOLLOWINGS_FAILURE = 'LOAD_FOLLOWINGS_FAILURE';
+
 export const LOAD_MY_INFO_REQUEST = 'LOAD_MY_INFO_REQUEST';
 export const LOAD_MY_INFO_SUCCESS = 'LOAD_MY_INFO_SUCCESS';
 export const LOAD_MY_INFO_FAILURE = 'LOAD_MY_INFO_FAILURE';
-
 
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
 export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
@@ -103,6 +116,36 @@ const dummyUser = (data) => ({
 // reducer은 이전 상태를 액션을 통해 다음 상태로 만들어 내는 함수(불변성을 지키면서)
 const reducer = (state = initialState, action) => produce(state, (draft) => {
     switch (action.type) {
+        case LOAD_FOLLOWERS_REQUEST:
+            draft.loadFollowersLoading = true;
+            draft.loadFollowersDone = false;
+            draft.loadFollowersError = null;
+            break;
+        case LOAD_FOLLOWERS_SUCCESS:
+            draft.loadFollowersLoading = false;
+            draft.loadFollowersDone = true;
+            draft.me.Followers = action.data;
+            break;
+        case LOAD_FOLLOWERS_FAILURE:
+            draft.loadFollowersLoading = false;
+            draft.loadFollowersError = action.data.error;
+            break;
+        
+        case LOAD_FOLLOWINGS_REQUEST:
+            draft.loadFollowingsLoading = true;
+            draft.loadFollowingsDone = false;
+            draft.loadFollowingsError = null;
+            break;
+        case LOAD_FOLLOWINGS_SUCCESS:
+            draft.loadFollowingsLoading = false;
+            draft.loadFollowingsDone = true;
+            draft.me.Followings = action.data;
+            break;
+        case LOAD_FOLLOWINGS_FAILURE:
+            draft.loadFollowingsLoading = false;
+            draft.loadFollowingsError = action.data.error;
+            break;
+
         case LOAD_MY_INFO_REQUEST:
             draft.loadMyInfoLoading = true;
             draft.loadMyInfoDone = false;
@@ -115,7 +158,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
             break;
         case LOAD_MY_INFO_FAILURE:
             draft.loadMyInfoLoading = false;
-            draft.loadMyInfoError = action.error;
+            draft.loadMyInfoError = action.data.error;
             break;
         
         case FOLLOW_REQUEST:
@@ -126,7 +169,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
         case FOLLOW_SUCCESS:
             draft.followLoading = false;
             draft.followDone = true;
-            draft.me.Followings.push({ id: action.data });
+            draft.me.Followings.push({ id: action.data.UserId })
             break;
         case FOLLOW_FAILURE:
             draft.followLoading = false;
@@ -140,7 +183,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
         case UNFOLLOW_SUCCESS:
             draft.unfollowLoading = false;
             draft.unfollowDone = true;
-            draft.me.Followings = draft.me.Followings.filter((v) => v.id !== action.data);
+            draft.me.Followings = draft.me.Followings.filter((v) => v.id !== action.data.UserId);
             break;
         case UNFOLLOW_FAILURE:
             draft.unfollowLoading = false;
