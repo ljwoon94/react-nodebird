@@ -5,9 +5,11 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 //npm i cookie-parser
 const postRouter = require('./routes/post');
+const postsRouter = require('./routes/posts');
 const userRouter = require('./routes/user');
 // import from과 같다.
 const db = require('./models');
+const morgan = require('morgan');
 const passportConfig = require('./passport');
 const passport = require('passport');
 const dotenv = require('dotenv');
@@ -22,6 +24,8 @@ db.sequelize.sync()
     .catch(console.error);
 passportConfig();
 
+app.use(morgan('dev'));
+//프론트로부터 요청 확인 가능
 app.use(cors({
     origin: 'http://localhost:3060',
     credentials: true,
@@ -50,19 +54,12 @@ app.get('/', (req,res)=>{
     //http는 res.write이지만 express는 send다.
 });
 
+
 app.get('/', (req,res)=>{
     res.send('hello api');
 });
 
-app.get('/posts', (req,res)=>{
-    res.json([
-        {id:1, content:'hello'},
-        {id:2, content:'hello2'},
-        {id:3, content:'hello3'},
-    ]);
-    //데이터는 json으로 표현
-});
-
+app.use('/posts',postsRouter);
 app.use('/post',postRouter);
 //app.use('/중복되는 url',postRouter);
 app.use('/user',userRouter);

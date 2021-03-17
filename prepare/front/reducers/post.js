@@ -1,6 +1,4 @@
-import shortId from 'shortid';
 import produce from 'immer';
-import faker from 'faker';
 
 export const initialState = {
     mainPosts: [
@@ -55,28 +53,29 @@ export const initialState = {
     addCommentError: null,
 };
 
-export const generateDumyPost = (number) => Array(number).fill().map(() => ({
-    id: shortId.generate(),
-    User: {
-        id: shortId.generate(),
-        nickname: faker.name.findName(),
-        //faker 랜덤 닉네임 
-    },
-    content: faker.lorem.paragraph(),
-    //faker 랜덤 문단
-    Images: [{
-        src: faker.image.image(),
-    }],
-    Comments: [{
-        User: {
-            id: shortId.generate(),
-            nickname: faker.name.findName(),
-            //faker 랜덤 닉네임 
-        },
-        content: faker.lorem.sentence(),
-        //faker 랜덤 문장
-    }],
-}));
+// 이제 안씀
+// export const generateDumyPost = (number) => Array(number).fill().map(() => ({
+//     id: shortId.generate(),
+//     User: {
+//         id: shortId.generate(),
+//         nickname: faker.name.findName(),
+//         //faker 랜덤 닉네임 
+//     },
+//     content: faker.lorem.paragraph(),
+//     //faker 랜덤 문단
+//     Images: [{
+//         src: faker.image.image(),
+//     }],
+//     Comments: [{
+//         User: {
+//             id: shortId.generate(),
+//             nickname: faker.name.findName(),
+//             //faker 랜덤 닉네임 
+//         },
+//         content: faker.lorem.sentence(),
+//         //faker 랜덤 문장
+//     }],
+// }));
 
 
 export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';
