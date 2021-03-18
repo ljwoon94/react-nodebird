@@ -18,13 +18,37 @@ try {
     fs.mkdirSync('uploads');
 }
 
+const upload = multer({
+    storage: multer.diskStorage({
+        destination(req, file, done){
+            done(null,'uploads');
+        },
+        filename(req,file,done){// 그림.jpg
+            const ext = path.extname(file.originalname); // 확장자 추출(.jpg)
+            const basename = path.basename(file.originalname,ext); // 그림
+            done(null, basename + '_' +new Date().getTime()+ ext); // 그림210318.jpg
+        },
+    }),
+    limits: {fileSize: 20 * 1024 * 1024 }, //20mb
+    //diskStorage는 하드에 저장 나중에 아마존 웹 서비스에다 할꺼
+});
 
-router.post('/', isLoggedIn, async (req,res,next)=>{ //POST /post
+router.post('/', isLoggedIn, upload.none(), async (req,res,next)=>{ //POST /post
     try {
         const post = await Post.create({
             content: req.body.content,
             UserId: req.user.id,
         });
+        if(req.body.image){
+            if(Array.isArray(req.body.image)){//이[미지를 여러개 올리면 image: []
+                const images = await Promise.all(req.body.image.map((image)=>Image.create({src:image})));
+                //db에 파일 주소만 갖는다.
+                await post.addImages(images);
+            } else{ // 이미지를 하나만 올리면 배열이 아닌 image: 그림.jpg
+                const image = await Image.create({src: req.body.image});
+                await post.addImages(image);
+            }
+        }
         const fullPost =await Post.findOne({
             where:{id:post.id},
             include:[{
@@ -50,21 +74,6 @@ router.post('/', isLoggedIn, async (req,res,next)=>{ //POST /post
         next(error);   
     }
     
-});
-
-const upload = multer({
-    storage: multer.diskStorage({
-        destination(req, file, done){
-            done(null,'uploads');
-        },
-        filename(req,file,done){// 그림.jpg
-            const ext = path.extname(file.originalname); // 확장자 추출(.jpg)
-            const basename = path.basename(file.originalname,ext); // 그림
-            done(null, basename + new Date().getTime()+ ext); // 그림210318.jpg
-        },
-    }),
-    limits: {fileSize: 20 * 1024 * 1024 }, //20mb
-    //diskStorage는 하드에 저장 나중에 아마존 웹 서비스에다 할꺼
 });
 
 router.post('/images', isLoggedIn, upload.array('image') ,async (req,res,next) => { //POST /post/images

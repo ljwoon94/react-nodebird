@@ -10,6 +10,7 @@ const userRouter = require('./routes/user');
 // import from과 같다.
 const db = require('./models');
 const morgan = require('morgan');
+const path = require('path');
 const passportConfig = require('./passport');
 const passport = require('passport');
 const dotenv = require('dotenv');
@@ -32,6 +33,10 @@ app.use(cors({
 }));
 //브라우저의 요청을 *은 전부 허용 평소엔 백서버만 허용하게함. 
 //credentials: true, 쿠키전달 허용   
+app.use('/',express.static(path.join(__dirname, 'uploads')));
+// 이미지 업로드 미리보기를 보기위해 설정 
+//운영체제 상관없이 경로를 만들기 위해 path.join
+// '/' 는 localhost
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 //사가에서 받아온 인자값을 req에 넣어둠
