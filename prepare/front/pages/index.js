@@ -34,8 +34,10 @@ const Home = () => {
             if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
                 //끝에서 300픽셀보다 더 내렸을 경우
                 if (hasMorePosts && !loadPostsLoading) {
+                    const lastId = mainPosts[mainPosts.length -1]?.id;
                     dispatch({
                         type: LOAD_POSTS_REQUEST,
+                        lastId,
                     });
                 }
 

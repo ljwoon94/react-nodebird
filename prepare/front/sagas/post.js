@@ -108,8 +108,9 @@ function* unlikePost(action) {
     }
 }
 
-function loadPostsAPI(data) {
-    return axios.get('/posts', data);
+function loadPostsAPI(lastId) {
+    return axios.get(`/posts?lastId=${lastId || 0}`);
+    // lastId가 null이면 0으로
 }
 
 function* loadPosts(action) {
