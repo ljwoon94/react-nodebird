@@ -115,7 +115,7 @@ function loadPostsAPI(lastId) {
 
 function* loadPosts(action) {
     try {
-        const result = yield call(loadPostsAPI, action.data);
+        const result = yield call(loadPostsAPI, action.lastId);
         console.log('saga post');
         yield put({
             type: LOAD_POSTS_SUCCESS,

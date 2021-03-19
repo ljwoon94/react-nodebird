@@ -9,10 +9,11 @@ router.get('/', async (req, res, next)=>{ //GET /posts //여러개 가져오는 
         const where = {};
         if (parseInt(req.query.lastId, 10)) { // 초기 로딩이 아닐 때
             where.id = { [Op.lt]: parseInt(req.query.lastId, 10)}
-          } // 21 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1
+        }   // 21 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1
             // 만약 lastId가 12면 12보다 작은 10개의 게시물을 불러옴.
             // Op.lt는 보다 작은 OP는 오퍼레이터 연산자
         const posts = await Post.findAll({
+            where,
             limit : 10,
             order :[
                 ['createdAt', 'DESC'],

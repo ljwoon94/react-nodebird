@@ -31,16 +31,14 @@ const Home = () => {
 
     useEffect(() => {
         function onScroll() {
-            if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
-                //끝에서 300픽셀보다 더 내렸을 경우
+            if (window.pageYOffset + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
                 if (hasMorePosts && !loadPostsLoading) {
-                    const lastId = mainPosts[mainPosts.length -1]?.id;
+                    const lastId = mainPosts[mainPosts.length - 1]?.id;
                     dispatch({
                         type: LOAD_POSTS_REQUEST,
                         lastId,
                     });
                 }
-
             }
         }
         window.addEventListener('scroll', onScroll);
@@ -48,7 +46,7 @@ const Home = () => {
             window.removeEventListener('scroll', onScroll);
             //종료하지 않으면 큰일남.
         };
-    }, [mainPosts, hasMorePosts, loadPostsLoading]);
+    }, [hasMorePosts, loadPostsLoading, mainPosts]);
     // 스크롤 끝까지 내릴시 로딩 후 이미지 가져오기
 
     return (
