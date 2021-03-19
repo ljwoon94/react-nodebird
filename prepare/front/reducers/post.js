@@ -60,6 +60,9 @@ export const initialState = {
     addCommentLoading: false,
     addCommentDone: false,
     addCommentError: null,
+    retweetLoading: false,
+    retweetDone: false,
+    retweetError: null,
 };
 
 // 이제 안씀
@@ -114,6 +117,10 @@ export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 
+export const RETWEET_REQUEST = 'RETWEET_REQUEST';
+export const RETWEET_SUCCESS = 'RETWEET_SUCCESS';
+export const RETWEET_FAILURE = 'RETWEET_FAILURE';
+
 export const REMOVE_IMAGE = 'REMOVE_IMAGE';
 
 export const addPost = (data) => ({
@@ -151,6 +158,22 @@ export const addComment = (data) => ({
 // reducer은 이전 상태를 액션을 통해 다음 상태로 만들어 내는 함수(불변성을 지키면서)
 const reducer = (state = initialState, action) => produce(state, (draft) => {
     switch (action.type) {
+        case RETWEET_REQUEST:
+            console.log('reducer post');
+            draft.retweetLoading = true;
+            draft.retweetDone = false;
+            draft.retweetError = null;
+            break;
+        case RETWEET_SUCCESS:{
+            draft.retweetLoading = false;
+            draft.retweetDone = true;
+            break;
+        }
+        case RETWEET_FAILURE:
+            draft.retweetLoading = false;
+            draft.retweetError = action.error;
+            break;
+        
         case REMOVE_IMAGE:
             draft.imagePaths = draft.imagePaths.filter((v, i) => i !== action.data);
         break;
