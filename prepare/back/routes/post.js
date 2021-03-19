@@ -105,7 +105,49 @@ router.post('/:postId/retweet', isLoggedIn,async (req,res,next)=>{ //POST /post/
             return res.status(403).send('본인의 글을 리트윗 할 수 없습니다.');
         }
         const retweetTargetId = post.RetweetId || post.id;
-        res.status(201).json(fullComment);
+        const exPost = await Post.findOne({
+            where:{
+                UserId: req.user.id,
+                RetweetId: retweetTargetId,
+            },
+        });
+        if(exPost){
+             return res.status(403).send('이미 리트윗 했습니다.');
+        }
+        const retweet = await Post.create({
+            UserId: req.user.id,
+            RetweetId: retweetTargetId,
+            content:'retweet',
+        });
+        const retweetWithPrevPost = await Post.findOne({
+            where: {id: retweet.id},
+            include: [{
+                model: Post,
+                as: 'Retweet',
+                include: [{
+                    model: User,
+                    attributes: ['id', 'nickname'],
+                    }, {
+                        model: Image,
+                    }]
+            }, {
+                model: User,
+                attributes: ['id','nickname'],
+            }, {
+                model: Image,
+            }, {
+                model: Comment,
+                include: [{
+                    model: User,
+                    attributes: ['id', 'nickname'],
+                }],
+            }, {
+                model: User,
+                as: 'Likers',
+                attributes: ['id'],
+            }],
+        });
+        res.status(201).json(retweetWithPrevPost);
     } catch (error) {
         console.error(error);
         next(error);   

@@ -27,7 +27,16 @@ router.get('/', async (req, res, next)=>{ //GET /posts //여러개 가져오는 
                 model:User, //좋아요 누른 사람
                 as: 'Likers',
                 attributes:['id'],
-            }],
+            }, {
+                model: Post,
+                as: 'Retweet',
+                include: [{
+                    model: User,
+                    attributes: ['id', 'nickname'],
+                    }, {
+                        model: Image,
+                    }]
+            }, ],
         }); 
         // findAll()모든 게시물 불러옴
         // limit: 10, 열개만 가져옴
