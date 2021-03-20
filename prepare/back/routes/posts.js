@@ -43,7 +43,7 @@ router.get('/', async (req, res, next)=>{ //GET /posts //여러개 가져오는 
                     }, {
                         model: Image,
                     }]
-            }, ],
+            }],
         }); 
         // findAll()모든 게시물 불러옴
         // limit: 10, 열개만 가져옴

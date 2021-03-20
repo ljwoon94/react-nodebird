@@ -20,6 +20,7 @@ const configureStore = () => {
     //enhancer 미들웨어 액션기록을 보기위해 사용
     //redux-devtools-extension
     store.sagaTask = sagaMiddleware.run(rootSaga);
+    //sagaTask 서바사이드 렌더링을 하기위해 필요
     return store;
 };
 

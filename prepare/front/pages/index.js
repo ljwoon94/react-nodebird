@@ -8,6 +8,8 @@ import PostForm from '../components/PostForm';
 import PostCard from '../components/PostCard';
 import { LOAD_POSTS_REQUEST } from '../reducers/post';
 import { LOAD_MY_INFO_REQUEST } from '../reducers/user';
+import wrapper from '../store/configureStore';
+import { END } from '@redux-saga/core';
 
 const Home = () => {
     const dispatch = useDispatch();
@@ -20,15 +22,7 @@ const Home = () => {
         }
     },[retweetError]);
 
-    useEffect(() => {
-        dispatch({
-            type: LOAD_MY_INFO_REQUEST,
-        });
-        dispatch({
-            type: LOAD_POSTS_REQUEST,
-        });
-    }, []);
-
+    
     useEffect(() => {
         function onScroll() {
             if (window.pageYOffset + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
@@ -59,6 +53,20 @@ const Home = () => {
     );
 };
 
+export const getServerSideProps = wrapper.getServerSideProps(async (context)=>{
+    context.store.dispatch({
+        type: LOAD_MY_INFO_REQUEST,
+    });
+    context.store.dispatch({
+        type: LOAD_POSTS_REQUEST,
+    });
+    context.store.dispatch(END);
+    await context.store.sagaTask.toPromise();
+    // context.store.dispatch(END);
+    // await context.store.sagaTask.toPromise();
+    // 문장이 존재해야 success가 응답함.
+});
+
 export default Home;
 
 
@@ -67,3 +75,4 @@ export default Home;
 // antd, antd icon 따로 설치 
 // antd는 ant design으로 중국 디자인 사이트
 // antd 안먹히면 @ctrl/tinycolor 3.3.1 추가해라
+// next를 사용하는 이유는 서버사이드 렌더링 때문
