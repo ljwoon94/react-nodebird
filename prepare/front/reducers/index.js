@@ -16,6 +16,7 @@ const rootReducer = (state, action) => {
                 user,
                 post,
         });
+        //combinedReducer user와 post가 합친 리듀서 생성
             return combinedReducer(state, action);
         }
     }

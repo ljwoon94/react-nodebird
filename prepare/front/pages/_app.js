@@ -18,6 +18,6 @@ const NodeBird = ({ Component }) => {
 
 NodeBird.propTypes = {
     Component: propTypes.elementType.isRequired,
-}
+};
 
 export default wrapper.withRedux(NodeBird);

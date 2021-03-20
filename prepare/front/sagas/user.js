@@ -1,5 +1,5 @@
 import { all, call, delay, fork, put, takeLatest } from "redux-saga/effects";
-import { CHANGE_NICKNAME_FAILURE, CHANGE_NICKNAME_REQUEST, CHANGE_NICKNAME_SUCCESS, FOLLOW_FAILURE, FOLLOW_REQUEST, FOLLOW_SUCCESS, LOAD_FOLLOWERS_FAILURE, LOAD_FOLLOWERS_REQUEST, LOAD_FOLLOWERS_SUCCESS, LOAD_FOLLOWINGS_FAILURE, LOAD_FOLLOWINGS_REQUEST, LOAD_FOLLOWINGS_SUCCESS, LOAD_MY_INFO_FAILURE, LOAD_MY_INFO_REQUEST, LOAD_MY_INFO_SUCCESS, LOG_IN_FAILURE, LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_OUT_FAILURE, LOG_OUT_REQUEST, LOG_OUT_SUCCESS, REMOVE_FOLLOWER_FAILURE, REMOVE_FOLLOWER_REQUEST, REMOVE_FOLLOWER_SUCCESS, SIGN_UP_FAILURE, SIGN_UP_REQUEST, SIGN_UP_SUCCESS, UNFOLLOW_FAILURE, UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS } from "../reducers/user";
+import { CHANGE_NICKNAME_FAILURE, CHANGE_NICKNAME_REQUEST, CHANGE_NICKNAME_SUCCESS, FOLLOW_FAILURE, FOLLOW_REQUEST, FOLLOW_SUCCESS, LOAD_FOLLOWERS_FAILURE, LOAD_FOLLOWERS_REQUEST, LOAD_FOLLOWERS_SUCCESS, LOAD_FOLLOWINGS_FAILURE, LOAD_FOLLOWINGS_REQUEST, LOAD_FOLLOWINGS_SUCCESS, LOAD_MY_INFO_FAILURE, LOAD_MY_INFO_REQUEST, LOAD_MY_INFO_SUCCESS, LOAD_USER_FAILURE, LOAD_USER_REQUEST, LOAD_USER_SUCCESS, LOG_IN_FAILURE, LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_OUT_FAILURE, LOG_OUT_REQUEST, LOG_OUT_SUCCESS, REMOVE_FOLLOWER_FAILURE, REMOVE_FOLLOWER_REQUEST, REMOVE_FOLLOWER_SUCCESS, SIGN_UP_FAILURE, SIGN_UP_REQUEST, SIGN_UP_SUCCESS, UNFOLLOW_FAILURE, UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS } from "../reducers/user";
 import axios from 'axios';
 
 function removeFollowerAPI(data) {
@@ -90,10 +90,10 @@ function loadMyInfoAPI() {
     return axios.get('/user');
 }
 
-function* loadMyInfo(action) {
+function* loadMyInfo() {
     try {
         console.log('saga loadMyInfo');
-        const result = yield call(loadMyInfoAPI, action.data);
+        const result = yield call(loadMyInfoAPI);
         //() 인자엔 첫번째는 함수 그 인후론 매게변수들 넣음. 
         // npm i passport passport-local 로그인를 다루는 미들웨어
         yield put({
@@ -111,6 +111,27 @@ function* loadMyInfo(action) {
     // 실패결과는 err.response.data
     // put은 디스패치라 생각하면 좋다
 }
+
+function loadUserAPI(data) {
+        return axios.get(`/user/${data}`);
+    }
+  
+    function* loadUser(action) {
+        try {
+            const result = yield call(loadUserAPI, action.data);
+            yield put({
+                type: LOAD_USER_SUCCESS,
+                data: result.data,
+            });
+        } catch (err) {
+            console.error(err);
+            yield put({
+                type: LOAD_USER_FAILURE,
+                error: err.response.data,
+            });
+        }
+    }
+  
 
 function followAPI(data) {
     return axios.patch(`/user/${data}/follow`);
@@ -235,6 +256,9 @@ function* watchChangeNickname() {
 function* watchLoadMyInfo() {
     yield takeLatest(LOAD_MY_INFO_REQUEST, loadMyInfo);
 }
+function* watchLoadUser() {
+    yield takeLatest(LOAD_USER_REQUEST, loadUser);
+  }
 function* watchFollow() {
     yield takeLatest(FOLLOW_REQUEST, follow);
 }
@@ -261,6 +285,7 @@ export default function* userSaga() {
         fork(watchLoadFollowings),
         fork(watchChangeNickname),
         fork(watchLoadMyInfo),
+        fork(watchLoadUser),
         fork(watchFollow),
         fork(watchUnfollow),
         fork(watchLogIn),

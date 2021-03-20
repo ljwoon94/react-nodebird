@@ -10,6 +10,7 @@ import { LOAD_POSTS_REQUEST } from '../reducers/post';
 import { LOAD_MY_INFO_REQUEST } from '../reducers/user';
 import wrapper from '../store/configureStore';
 import { END } from '@redux-saga/core';
+import axios from 'axios';
 
 const Home = () => {
     const dispatch = useDispatch();
@@ -54,6 +55,14 @@ const Home = () => {
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(async (context)=>{
+    console.log('getServerSideProps start');
+    const cookie = context.req ? context.req.headers.cookie : '';
+    //쿠키정보가 여기에 들어감.
+    axios.defaults.headers.Cookie = '';
+    if (context.req && cookie) {
+        axios.defaults.headers.Cookie = cookie;
+    }
+    // 매우 중요
     context.store.dispatch({
         type: LOAD_MY_INFO_REQUEST,
     });
