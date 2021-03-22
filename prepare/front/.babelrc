@@ -1,0 +1,17 @@
+// 서버사이드 랜더링에 필요한 단계
+{
+    "presets": [
+        "next/babel"
+    ],
+    "plugins": [
+        [
+            "babel-plugin-styled-components",
+            {
+                "ssr": true,
+                "displayName": true
+            }
+        ]
+    ]
+}
+// npm i babel-plugin-styled-components
+// pages에 _document.js 생성
