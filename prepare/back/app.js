@@ -8,6 +8,7 @@ const postRouter = require('./routes/post');
 const postsRouter = require('./routes/posts');
 const userRouter = require('./routes/user');
 // import from과 같다.
+const hashtagRouter = require('./routes/hashtag');
 const db = require('./models');
 const morgan = require('morgan');
 const path = require('path');
@@ -68,6 +69,7 @@ app.use('/posts',postsRouter);
 app.use('/post',postRouter);
 //app.use('/중복되는 url',postRouter);
 app.use('/user',userRouter);
+app.use('/hashtag',hashtagRouter);
 
 // app.use((err,req,res,next)=>{
 
