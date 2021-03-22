@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-export default (initialValue = null) => {
+const useInput = (initialValue = null) => {
     const [value, setValue] = useState(initialValue);
     const handler = useCallback((e) => {
         setValue(e.target.value);
@@ -9,3 +9,4 @@ export default (initialValue = null) => {
 }
 
 // 커스텀 훅으로 계속 반복되는 코드를 만들어둠
+export default useInput;

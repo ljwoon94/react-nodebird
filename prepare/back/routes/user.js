@@ -44,7 +44,42 @@ router.get('/', async (req,res,next)=>{ //GET /user
 
 });
 
+router.get('/followers', isLoggedIn, async (req, res, next) => { // GET /user/followers
+    try {
+        const user = await User.findOne({ where: { id: req.user.id }});
+        if (!user) {
+            res.status(403).send('없는 사람을 찾으려고 하시네요?');
+        }
+        const followers = await user.getFollowers({
+            limit: parseInt(req.query.limit,10),
+        });
+        res.status(200).json(followers);
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+  
+router.get('/followings', isLoggedIn, async (req, res, next) => { // GET /user/followings
+    try {
+        const user = await User.findOne({ where: { id: req.user.id }});
+        if (!user) {
+            res.status(403).send('존재하지 않는 사람입니다.');
+        }
+        const followings = await user.getFollowings({
+            limit: parseInt(req.query.limit,10),
+        });
+        res.status(200).json(followings);
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
+
 router.get('/:userId', async (req,res,next)=>{ //GET /user
+    // /: 를 와일드 카드라고 한다.
+    // 와일드 카드가 있는 라우터는 코드 아래로 옮겨야한다.
     try { 
         
         const fullUserWithoutPassword = await User.findOne({ // GET /user/1/posts
@@ -249,33 +284,7 @@ router.delete('/:userId/follow', isLoggedIn, async (req, res, next) => { // DELE
     }
 });
 
-router.get('/followers', isLoggedIn, async (req, res, next) => { // GET /user/followers
-    try {
-        const user = await User.findOne({ where: { id: req.user.id }});
-        if (!user) {
-            res.status(403).send('없는 사람을 찾으려고 하시네요?');
-        }
-        const followers = await user.getFollowers();
-        res.status(200).json(followers);
-    } catch (error) {
-        console.error(error);
-        next(error);
-    }
-});
-  
-router.get('/followings', isLoggedIn, async (req, res, next) => { // GET /user/followings
-    try {
-        const user = await User.findOne({ where: { id: req.user.id }});
-        if (!user) {
-            res.status(403).send('존재하지 않는 사람입니다.');
-        }
-        const followings = await user.getFollowings();
-        res.status(200).json(followings);
-    } catch (error) {
-        console.error(error);
-        next(error);
-    }
-});
+
 
 router.delete('/follower/:userId', isLoggedIn, async (req, res, next) => { // DELETE /user/follower/2
     try {
