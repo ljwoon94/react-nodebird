@@ -36,6 +36,7 @@ export const initialState = {
         //     }],
         // }
     ],
+    singlePost: [],
     imagePaths: [],
     // imagePaths는 이미지 업로드할때 생기는 경로가 저장
     hasMorePosts: true,
@@ -48,6 +49,9 @@ export const initialState = {
     unlikePostLoading: false,
     unlikePostDone: false,
     unlikePostError: null,
+    loadPostLoading: false,
+    loadPostDone: false,
+    loadPostError: null,
     loadPostsLoading: false,
     loadPostsDone: false,
     loadPostsError: null,
@@ -100,6 +104,10 @@ export const LIKE_POST_FAILURE = 'LIKE_POST_FAILURE';
 export const UNLIKE_POST_REQUEST = 'UNLIKE_POST_REQUEST';
 export const UNLIKE_POST_SUCCESS = 'UNLIKE_POST_SUCCESS';
 export const UNLIKE_POST_FAILURE = 'UNLIKE_POST_FAILURE';
+
+export const LOAD_POST_REQUEST = 'LOAD_POST_REQUEST';
+export const LOAD_POST_SUCCESS = 'LOAD_POST_SUCCESS';
+export const LOAD_POST_FAILURE = 'LOAD_POST_FAILURE';
 
 export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';
 export const LOAD_POSTS_SUCCESS = 'LOAD_POSTS_SUCCESS';
@@ -232,6 +240,25 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
             draft.unlikePostError = action.error;
             break;
         
+        case LOAD_POST_REQUEST:
+            console.log('reducer post');
+            draft.loadPostLoading = true;
+            draft.loadPostDone = false;
+            draft.loadPostError = null;
+            break;
+        case LOAD_POST_SUCCESS:
+            draft.mainPosts = draft.mainPosts.concat(action.data);
+            //concat 합치기
+            draft.loadPostLoading = false;
+            draft.loadPostDone = true;
+            draft.singlePost = action.data;
+            //singlePost 하나만 저장할때
+            break;
+        case LOAD_POST_FAILURE:
+            draft.loadPostLoading = false;
+            draft.loadPostError = action.error;
+            break;    
+            
         case LOAD_POSTS_REQUEST:
             console.log('reducer post');
             draft.loadPostsLoading = true;
