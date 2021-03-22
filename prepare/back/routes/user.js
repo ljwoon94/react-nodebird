@@ -42,6 +42,45 @@ router.get('/', async (req,res,next)=>{ //GET /user
 
 });
 
+router.get('/:userId', async (req,res,next)=>{ //GET /user
+    try { 
+        
+        const fullUserWithoutPassword = await User.findOne({ // GET /user/1/posts
+            where: {id : req.params.userId},
+            attributes:{
+                exclude:['password']
+            },
+            //전체 데이터 중 password만 가져오지 않겠다.
+            include:[{
+                model: Post,
+            },{
+                model: User,
+                as: 'Followings',
+                attributes:['id'],
+            },{
+                model: User,
+                as:'Followers',
+                attributes:['id'],
+            }]
+                //as를 썻으면 model에 user.js에도 ad 넣어준다.
+                //팔로워 데이터 다 가져오면 엄청 무거우니깐 id만 가져왕
+        })
+        if (fullUserWithoutPassword){
+            const data = fullUserWithoutPassword.toJSON();
+            data.Posts = data.Posts.length; //개인정보 침해 예방
+            data.Followings = data.Followings.length;
+            data.Followers = data.Followers.length;
+            res.status(200).json(data);
+        } else {
+            res.status(404).json('존재하지 않는 사용자 입니다.');
+        }
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+
+});
+
 router.post('/login',isNotLoggedIn, (req, res, next)=>{
     //미들웨어 확장법
     passport.authenticate('local',(err,user,info)=>{
