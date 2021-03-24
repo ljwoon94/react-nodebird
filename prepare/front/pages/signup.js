@@ -6,7 +6,7 @@ import { Form, Input, Checkbox, Button } from 'antd';
 import styled from 'styled-components';
 import axios from 'axios';
 import { END } from 'redux-saga';
-
+import wrapper from '../store/configureStore';
 
 import useInput from '../hooks/useInput';
 import { LOAD_MY_INFO_REQUEST, SIGN_UP_REQUEST } from '../reducers/user';

@@ -19,6 +19,7 @@ const UserProfile = () => {
                 <div key="followers"><Link href="/profile"><a>팔로워<br />{me.Followers.length}</a></Link></div>,
             ]}
         >
+            {/* npm i moment 날짜 api*/}
             {/* 버튼은 actions으로 구현 */}
             <Card.Meta
                 avatar={

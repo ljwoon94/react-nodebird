@@ -35,7 +35,7 @@ const SearchInput = styled(Input.Search)`
 // styled-components를 사용하는것이 좋다.
 
 const AppLayout = ({ children }) => {
-    const {searchInput, onChangeSearchInput} = useInput('');
+    const [searchInput, onChangeSearchInput] = useInput('');
     const { me } = useSelector((state) => state.user);
     
     const onSearch = useCallback(()=>{
@@ -59,9 +59,6 @@ const AppLayout = ({ children }) => {
                         onChange={onChangeSearchInput}
                         onSearch={onSearch}
                     />
-                </Menu.Item>
-                <Menu.Item>
-                    <Link href="/signup"><a>회원가입</a></Link>
                 </Menu.Item>
             </Menu>
             <Row gutter={8}>

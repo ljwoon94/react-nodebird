@@ -9,6 +9,10 @@ import PostCardContent from './PostCardContent';
 import { LIKE_POST_REQUEST, REMOVE_POST_REQUEST, UNLIKE_POST_REQUEST, RETWEET_REQUEST } from '../reducers/post';
 import FollowButton from './FollowButton';
 import Link from 'next/link';
+import moment from 'moment';
+// moment 날짜 api
+
+moment.locale('ko');
 
 const PostCard = ({ post }) => {
     const dispatch = useDispatch();
@@ -91,6 +95,7 @@ const PostCard = ({ post }) => {
                 ? (
                     <Card
                         cover={post.Retweet.Images[0] && <PostImages images={post.Retweet.Images} />}>
+                        <div style={{float:'right'}}>{moment(post.createAt).format('YYYY.MM.DD')}</div>
                         <Card.Meta
                             avatar={(
                                 <Link href={`/user/${post.Retweet.User.id}`}>
@@ -102,9 +107,12 @@ const PostCard = ({ post }) => {
                                 <PostCardContent postData={post.Retweet.content} />
                             )}
                         />
+
                     </Card>
                 )
                 : (
+                    <>
+                    <div style={{float:'right'}}>{moment(post.createAt).format('YYYY.MM.DD')}</div>
                     <Card.Meta
                     avatar={(
                         <Link href={`/user/${post.User.id}`}>
@@ -114,6 +122,7 @@ const PostCard = ({ post }) => {
                         title={post.User.nickname}
                         description={<PostCardContent postData={post.content} />}
                     />
+                    </>
                 )}
 
             </Card >
