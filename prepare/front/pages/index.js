@@ -74,6 +74,7 @@ export const getServerSideProps = wrapper.getServerSideProps(async (context)=>{
     // context.store.dispatch(END);
     // await context.store.sagaTask.toPromise();
     // 문장이 존재해야 success가 응답함.
+
 });
 
 export default Home;

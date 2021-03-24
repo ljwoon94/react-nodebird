@@ -5,7 +5,7 @@ const path = require('path');
 //path를 통해 업로드 된 파일 확장자를 빼올 수 있다.
 const fs = require('fs');
 
-const {Post, Image, Comment, User, Hashtag} = require('../models');
+const { Post, Image, Comment, User, Hashtag } = require('../models');
 const {isLoggedIn} = require('./middlewares');
 
 const router = express.Router();

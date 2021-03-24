@@ -1597,8 +1597,7 @@ module.exports = require("next-redux-wrapper");
 /* unused harmony export loginAction */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "K", function() { return loginRequestAction; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "L", function() { return logoutRequestAction; });
-/* harmony import */ var immer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("T5ka");
-/* harmony import */ var immer__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(immer__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _util_produce__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("ionj");
 
 const initialState = {
   removeFollowerLoading: false,
@@ -1729,7 +1728,7 @@ const logoutRequestAction = data => {
 // });
 // reducer은 이전 상태를 액션을 통해 다음 상태로 만들어 내는 함수(불변성을 지키면서)
 
-const reducer = (state = initialState, action) => immer__WEBPACK_IMPORTED_MODULE_0___default()(state, draft => {
+const reducer = (state = initialState, action) => Object(_util_produce__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(state, draft => {
   switch (action.type) {
     case REMOVE_FOLLOWER_REQUEST:
       draft.removeFollowerLoading = true;
@@ -3961,6 +3960,20 @@ function parseRelativeUrl(url, base) {
 
 /***/ }),
 
+/***/ "ionj":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var immer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("T5ka");
+/* harmony import */ var immer__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(immer__WEBPACK_IMPORTED_MODULE_0__);
+
+/* harmony default export */ __webpack_exports__["a"] = ((...args) => {
+  Object(immer__WEBPACK_IMPORTED_MODULE_0__["enableES5"])();
+  return Object(immer__WEBPACK_IMPORTED_MODULE_0__["produce"])(...args);
+});
+
+/***/ }),
+
 /***/ "nOHt":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4154,8 +4167,7 @@ function makePublicRouterInstance(router) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "v", function() { return REMOVE_IMAGE; });
 /* unused harmony export addPost */
 /* unused harmony export addComment */
-/* harmony import */ var immer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("T5ka");
-/* harmony import */ var immer__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(immer__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _util_produce__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("ionj");
 
 const initialState = {
   mainPosts: [// {
@@ -4309,7 +4321,7 @@ const addComment = data => ({
 // });
 // reducer은 이전 상태를 액션을 통해 다음 상태로 만들어 내는 함수(불변성을 지키면서)
 
-const reducer = (state = initialState, action) => immer__WEBPACK_IMPORTED_MODULE_0___default()(state, draft => {
+const reducer = (state = initialState, action) => Object(_util_produce__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(state, draft => {
   switch (action.type) {
     case RETWEET_REQUEST:
       console.log('reducer post');

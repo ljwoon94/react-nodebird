@@ -1,29 +1,36 @@
-module.exports =(sequelize, DataTypes)=>{
-    const User = sequelize.define('User',{ //mysql에선 User가 users 소문자 복수형으로 바뀌어서 저장
-        // id가 기본적으로 들어있다.
-        email:{
-            type: DataTypes.STRING(30),
-            allowNull: false, // 필수 여부 false필수다.
-            unique: true, // 고유한 값 여부 true는 ok
-        },
-        nickname:{
-            type: DataTypes.STRING(30),
-            allowNull: false, // 필수 여부 false필수다.
-        },
-        password:{
-            type: DataTypes.STRING(100),
-            allowNull: false, // 필수 여부 false필수다.
-        },
-    }, {
-        charaset:'utf8',
-        collate:'utf8_general_ci', //한글 저장       
-    });
-    User.associate=(db)=>{
+const DataTypes = require('sequelize');
+const { Model } = DataTypes;
+
+module.exports = class User extends Model {
+    static init(sequelize) {
+        return super.init({
+            // id가 기본적으로 들어있다.
+            email: {
+                type: DataTypes.STRING(30), // STRING, TEXT, BOOLEAN, INTEGER, FLOAT, DATETIME
+                allowNull: false, // 필수
+                unique: true, // 고유한 값
+            },
+            nickname: {
+                type: DataTypes.STRING(30),
+                allowNull: false, // 필수
+            },
+            password: {
+                type: DataTypes.STRING(100),
+                allowNull: false, // 필수
+            },
+            }, {
+                modelName: 'User',
+                tableName: 'users',
+                charset: 'utf8',
+                collate: 'utf8_general_ci', // 한글 저장
+                sequelize,
+            });
+    }
+    static associate(db) {
         db.User.hasMany(db.Post);
         db.User.hasMany(db.Comment);
-        db.User.belongsToMany(db.Post, {through:'Like', as:'Liked'});
-        db.User.belongsToMany(db.User, {through: 'Follow', as: 'Followers', foreignKey: 'FollowingId'});
-        db.User.belongsToMany(db.User, {through: 'Follow', as: 'Followings', foreignKey: 'FollowerId'});
-    };
-    return User;
+        db.User.belongsToMany(db.Post, { through: 'Like', as: 'Liked' })
+        db.User.belongsToMany(db.User, { through: 'Follow', as: 'Followers', foreignKey: 'FollowingId' });
+        db.User.belongsToMany(db.User, { through: 'Follow', as: 'Followings', foreignKey: 'FollowerId' });
+    }
 };
