@@ -86,7 +86,7 @@ app.use('/hashtag',hashtagRouter);
 // });
 // //에러처리 미들웨어 기본적으로 되어있으나 수정하고 싶을 경우 사용
 
-app.listen(3065,()=>{
+app.listen(80,()=>{
     console.log('서버 실행 중');
 });
 // 서버에선 3065가 아니라 80으로 바꾼다.

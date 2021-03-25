@@ -3,9 +3,11 @@ import axios from 'axios';
 
 import postSaga from './post';
 import userSaga from './user';
+import { backUrl } from '../config/config';
 
-axios.defaults.baseURL = 'http://localhost:3065';
+axios.defaults.baseURL = backUrl;
 //sagas 의 post url를 등록
+//백 서버 아이피 넣기
 axios.defaults.withCredentials = true;
 //쿠기 전달 허용 이제 saga에 공통적으로 적용된다.
 export default function* rootSaga() {
