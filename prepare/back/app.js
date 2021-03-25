@@ -4,6 +4,8 @@ const cors = require('cors');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 //npm i cookie-parser
+const hpp = require('hpp');
+const helmet = require('helmet');
 const postRouter = require('./routes/post');
 const postsRouter = require('./routes/posts');
 const userRouter = require('./routes/user');
@@ -26,10 +28,18 @@ db.sequelize.sync()
     .catch(console.error);
 passportConfig();
 
-app.use(morgan('dev'));
+
+if(process.env.NODE_ENV ==='production'){
+    app.use(morgan('combined'));
+    app.use(hpp());
+    app.use(helmet());
+} else {
+    app.use(morgan('dev'));
+}
+// npm i pm2 cross-env helmet hpp
 //프론트로부터 요청 확인 가능
 app.use(cors({
-    origin: 'http://localhost:3060',
+    origin: ['http://localhost:3060','nodebird.com'],
     credentials: true,
 }));
 //브라우저의 요청을 *은 전부 허용 평소엔 백서버만 허용하게함. 
@@ -75,10 +85,11 @@ app.use('/hashtag',hashtagRouter);
 
 // });
 // //에러처리 미들웨어 기본적으로 되어있으나 수정하고 싶을 경우 사용
+
 app.listen(3065,()=>{
     console.log('서버 실행 중');
 });
-
+// 서버에선 3065가 아니라 80으로 바꾼다.
 
 //노드가 http 모듈 제공
 // http가 서버역할을 해줌
