@@ -39,7 +39,7 @@ if(process.env.NODE_ENV ==='production'){
 // npm i pm2 cross-env helmet hpp
 //프론트로부터 요청 확인 가능
 app.use(cors({
-    origin: ['http://localhost:3060','nodebird.com','http://13.125.189.118'],
+    origin: ['http://localhost:3060','nodebird.com','http://13.209.69.113'],
     credentials: true,
 }));
 //브라우저의 요청을 *은 전부 허용 평소엔 백서버만 허용하게함. 
