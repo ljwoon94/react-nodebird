@@ -33,17 +33,22 @@ if(process.env.NODE_ENV ==='production'){
     app.use(morgan('combined'));
     app.use(hpp());
     app.use(helmet());
+    app.use(cors({
+        origin: 'http://jeongwoon.site',
+        credentials: true,
+    }));
 } else {
     app.use(morgan('dev'));
+    app.use(cors({
+        origin: true,
+        credentials: true,
+    }));
+    //브라우저의 요청을 *은 전부 허용 평소엔 백서버만 허용하게함. 
+    //credentials: true, 쿠키전달 허용  
 }
 // npm i pm2 cross-env helmet hpp
 //프론트로부터 요청 확인 가능
-app.use(cors({
-    origin: ['http://localhost:3060','http://jeongwoon.site','http://54.180.200.233'],
-    credentials: true,
-}));
-//브라우저의 요청을 *은 전부 허용 평소엔 백서버만 허용하게함. 
-//credentials: true, 쿠키전달 허용   
+ 
 app.use('/',express.static(path.join(__dirname, 'uploads')));
 // 이미지 업로드 미리보기를 보기위해 설정 
 //운영체제 상관없이 경로를 만들기 위해 path.join
@@ -61,7 +66,7 @@ app.use(session({
         httpOnly: true,
         secure: false,
         domain: process.env.NODE_ENV === 'production' && '.jeongwoon.site'
-    }
+    },
 }));
 // npm i express-session
 // 세션관리
