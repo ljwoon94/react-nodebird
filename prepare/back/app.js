@@ -39,7 +39,7 @@ if(process.env.NODE_ENV ==='production'){
 // npm i pm2 cross-env helmet hpp
 //프론트로부터 요청 확인 가능
 app.use(cors({
-    origin: ['http://localhost:3060','nodebird.com','http://54.180.200.233'],
+    origin: ['http://localhost:3060','http://jeongwoon.site','http://54.180.200.233'],
     credentials: true,
 }));
 //브라우저의 요청을 *은 전부 허용 평소엔 백서버만 허용하게함. 
@@ -57,6 +57,11 @@ app.use(session({
     saveUninitialized: false,
     resave: false,
     secret: process.env.COOKIE_SECRET,
+    cookie: {
+        httpOnly: true,
+        secure: false,
+        domain: process.env.NODE_ENV === 'production' && '.jeongwoon.site'
+    }
 }));
 // npm i express-session
 // 세션관리
