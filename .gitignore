@@ -6,3 +6,4 @@ node_modules
 .env
 .next
 prepare/nodebird.pem
+prepare/back/rootkey.csv

@@ -4,6 +4,8 @@ const multer = require('multer');
 const path = require('path');
 //path를 통해 업로드 된 파일 확장자를 빼올 수 있다.
 const fs = require('fs');
+const multerS3 = require('multer-s3');
+const AWS = require('aws-sdk');
 
 const { Post, Image, Comment, User, Hashtag } = require('../models');
 const {isLoggedIn} = require('./middlewares');
@@ -18,16 +20,27 @@ try {
     fs.mkdirSync('uploads');
 }
 
+AWS.config.update({
+    accessKeyId: process.env.S3_ACCESS_KEY_ID,
+    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+    region:'ap-northeast-2',
+});
 const upload = multer({
-    storage: multer.diskStorage({
-        destination(req, file, done){
-            done(null,'uploads');
-        },
-        filename(req,file,done){// 그림.jpg
-            const ext = path.extname(file.originalname); // 확장자 추출(.jpg)
-            const basename = path.basename(file.originalname,ext); // 그림
-            done(null, basename + '_' +new Date().getTime()+ ext); // 그림210318.jpg
-        },
+    storage: multerS3({
+        s3: new AWS.S3(),
+        bucket: 'jeongwoon-sns',
+        key(reg, file, cb){
+            cb(null, `original/${Date.now()}_${path.basename(file.originalname)}`)
+        }
+    // storage: multer.diskStorage({
+    //     destination(req, file, done){
+    //         done(null,'uploads');
+    //     },
+    //     filename(req,file,done){// 그림.jpg
+    //         const ext = path.extname(file.originalname); // 확장자 추출(.jpg)
+    //         const basename = path.basename(file.originalname,ext); // 그림
+    //         done(null, basename + '_' +new Date().getTime()+ ext); // 그림210318.jpg
+    //     },
     }),
     limits: {fileSize: 20 * 1024 * 1024 }, //20mb
     //diskStorage는 하드에 저장 나중에 아마존 웹 서비스에다 할꺼
@@ -86,7 +99,7 @@ router.post('/', isLoggedIn, upload.none(), async (req,res,next)=>{ //POST /post
 
 router.post('/images', isLoggedIn, upload.array('image') ,async (req,res,next) => { //POST /post/images
     console.log(req.files);
-    res.json(req.files.map((v)=>v.filename));
+    res.json(req.files.map((v)=>v.location));
 });
 
 router.post('/:postId/retweet', isLoggedIn,async (req,res,next)=>{ //POST /post/comment
