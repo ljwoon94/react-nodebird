@@ -29,7 +29,7 @@ const upload = multer({
     storage: multerS3({
         s3: new AWS.S3(),
         bucket: 'jeongwoon-sns',
-        key(reg, file, cb){
+        key(req, file, cb) {
             cb(null, `original/${Date.now()}_${path.basename(file.originalname)}`)
         }
     // storage: multer.diskStorage({

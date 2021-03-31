@@ -8,7 +8,7 @@
     "dev": "nodemon app",
     "start": "cross-env NODE_ENV=production pm2 start app.js"
   },
-  "author": "JeongWoon",
+  "author": "Jeong Woon Lee",
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.874.0",
