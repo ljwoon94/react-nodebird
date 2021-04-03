@@ -1,7 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Input } from 'antd';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 const { TextArea } = Input; 
 const PostCardContent = ({ postData, editMode, onChangePost ,onCancelUpdate }) => { 

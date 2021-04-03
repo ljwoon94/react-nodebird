@@ -4452,6 +4452,7 @@ var link_default = /*#__PURE__*/__webpack_require__.n(next_link);
 
 
 
+
 const {
   TextArea
 } = external_antd_["Input"];
@@ -4465,12 +4466,12 @@ const PostCardContent = ({
   const {
     updatePostLoading,
     updatePostDone
-  } = useSelector(state => state.post);
+  } = Object(external_react_redux_["useSelector"])(state => state.post);
   const {
     0: editText,
     1: setEditText
   } = Object(external_react_["useState"])(postData);
-  useEffect(() => {
+  Object(external_react_["useEffect"])(() => {
     if (updatePostDone) {
       onCancelUpdate();
     }
