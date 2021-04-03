@@ -245,6 +245,7 @@ function* updatePost(action) {
             data: result.data,
         });
     } catch (err) {
+        console.error(err);
         yield put({
             type: UPDATE_POST_FAILURE,
             error: err.response.data,

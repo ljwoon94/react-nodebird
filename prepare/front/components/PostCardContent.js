@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Input } from 'antd';
+import { Button, Input } from 'antd';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
@@ -16,7 +16,7 @@ const PostCardContent = ({ postData, editMode, onChangePost ,onCancelUpdate }) =
     }, [updatePostDone]);
 
     const onChangeText = useCallback((e) => {
-        setEditText(e.target.valie);
+        setEditText(e.target.value);
     });
 
     return (// 첫 번째 게시글 #해시태그 #익스프레스
