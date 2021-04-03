@@ -88,7 +88,7 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -777,7 +777,7 @@ function formatUrl(urlObj) {
 
 /***/ }),
 
-/***/ 8:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__("Qrvq");
@@ -852,13 +852,13 @@ function* uploadImages(action) {
     const result = yield Object(effects_["call"])(uploadImagesAPI, action.data);
     console.log('saga post');
     yield Object(effects_["put"])({
-      type: post["H" /* UPLOAD_IMAGES_SUCCESS */],
+      type: post["K" /* UPLOAD_IMAGES_SUCCESS */],
       data: result.data
     });
   } catch (err) {
     console.error(err);
     yield Object(effects_["put"])({
-      type: post["F" /* UPLOAD_IMAGES_FAILURE */],
+      type: post["I" /* UPLOAD_IMAGES_FAILURE */],
       error: err.response.data
     });
   }
@@ -1014,6 +1014,26 @@ function* addPost(action) {
   }
 }
 
+function updatePostAPI(data) {
+  return external_axios_default.a.patch(`/post/${data.PostId}`, data);
+}
+
+function* updatePost(action) {
+  try {
+    const result = yield Object(effects_["call"])(updatePostAPI, action.data);
+    console.log('saga post');
+    yield Object(effects_["put"])({
+      type: post["H" /* UPDATE_POST_SUCCESS */],
+      data: result.data
+    });
+  } catch (err) {
+    yield Object(effects_["put"])({
+      type: post["F" /* UPDATE_POST_FAILURE */],
+      error: err.response.data
+    });
+  }
+}
+
 function removePostAPI(data) {
   return external_axios_default.a.delete(`/post/${data}`);
 }
@@ -1063,7 +1083,7 @@ function* watchRetweet() {
 }
 
 function* watchUploadImages() {
-  yield Object(effects_["takeLatest"])(post["G" /* UPLOAD_IMAGES_REQUEST */], uploadImages);
+  yield Object(effects_["takeLatest"])(post["J" /* UPLOAD_IMAGES_REQUEST */], uploadImages);
 }
 
 function* watchLikePost() {
@@ -1094,6 +1114,10 @@ function* watchAddPost() {
   yield Object(effects_["takeLatest"])(post["e" /* ADD_POST_REQUEST */], addPost);
 }
 
+function* watchUpdatePost() {
+  yield Object(effects_["takeLatest"])(post["G" /* UPDATE_POST_REQUEST */], updatePost);
+}
+
 function* watchRemovePost() {
   yield Object(effects_["takeLatest"])(post["x" /* REMOVE_POST_REQUEST */], removePost);
 }
@@ -1103,7 +1127,7 @@ function* watchAddComment() {
 }
 
 function* postSaga() {
-  yield Object(effects_["all"])([Object(effects_["fork"])(watchRetweet), Object(effects_["fork"])(watchUploadImages), Object(effects_["fork"])(watchLikePost), Object(effects_["fork"])(watchUnlikePost), Object(effects_["fork"])(watchAddPost), Object(effects_["fork"])(watchLoadPost), Object(effects_["fork"])(watchLoadPosts), Object(effects_["fork"])(watchLoadUserPosts), Object(effects_["fork"])(watchLoadHashtagPosts), Object(effects_["fork"])(watchRemovePost), Object(effects_["fork"])(watchAddComment)]);
+  yield Object(effects_["all"])([Object(effects_["fork"])(watchRetweet), Object(effects_["fork"])(watchUploadImages), Object(effects_["fork"])(watchLikePost), Object(effects_["fork"])(watchUnlikePost), Object(effects_["fork"])(watchAddPost), Object(effects_["fork"])(watchLoadPost), Object(effects_["fork"])(watchLoadPosts), Object(effects_["fork"])(watchLoadUserPosts), Object(effects_["fork"])(watchLoadHashtagPosts), Object(effects_["fork"])(watchUpdatePost), Object(effects_["fork"])(watchRemovePost), Object(effects_["fork"])(watchAddComment)]);
 }
 // CONCATENATED MODULE: ./sagas/user.js
 
@@ -1393,12 +1417,17 @@ function* userSaga() {
   yield Object(effects_["all"])([Object(effects_["fork"])(watchRemoveFollower), Object(effects_["fork"])(watchLoadFollowers), Object(effects_["fork"])(watchLoadFollowings), Object(effects_["fork"])(watchChangeNickname), Object(effects_["fork"])(watchLoadMyInfo), Object(effects_["fork"])(watchLoadUser), Object(effects_["fork"])(watchFollow), Object(effects_["fork"])(watchUnfollow), Object(effects_["fork"])(watchLogIn), Object(effects_["fork"])(watchLogOut), Object(effects_["fork"])(watchSignUp)]);
 }
 ;
+// EXTERNAL MODULE: ./config/config.js
+var config = __webpack_require__("OcYQ");
+
 // CONCATENATED MODULE: ./sagas/index.js
 
 
 
 
-external_axios_default.a.defaults.baseURL = 'http://localhost:3065'; //sagas 의 post url를 등록
+
+external_axios_default.a.defaults.baseURL = config["a" /* backUrl */]; //sagas 의 post url를 등록
+//백 서버 아이피 넣기
 
 external_axios_default.a.defaults.withCredentials = true; //쿠기 전달 허용 이제 saga에 공통적으로 적용된다.
 
@@ -1450,7 +1479,7 @@ const rootReducer = (state, action) => {
       {
         const combinedReducer = Object(external_redux_["combineReducers"])({
           user: user["J" /* default */],
-          post: post["I" /* default */]
+          post: post["L" /* default */]
         }); //combinedReducer user와 post가 합친 리듀서 생성
 
         return combinedReducer(state, action);
@@ -2219,6 +2248,15 @@ module.exports = require("react-slick");
 
 /***/ }),
 
+/***/ "OcYQ":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return backUrl; });
+const backUrl = 'https://api.jeongwoon.site';
+
+/***/ }),
+
 /***/ "Osoz":
 /***/ (function(module, exports) {
 
@@ -2280,7 +2318,8 @@ const User = () => {
     loadPostsLoading
   } = Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["useSelector"])(state => state.post);
   const {
-    userInfo
+    userInfo,
+    me
   } = Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["useSelector"])(state => state.user);
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(() => {
     const onScroll = () => {
@@ -2315,9 +2354,12 @@ const User = () => {
         content: `${userInfo.nickname}님의 게시글`
       }), /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__["jsx"])("meta", {
         property: "og:url",
-        content: `https://nodebird.com/user/${id}`
+        content: `https://jeongwoon.site/user/${id}`
       })]
-    }), userInfo ? /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__["jsx"])(antd__WEBPACK_IMPORTED_MODULE_3__["Card"], {
+    }), userInfo && userInfo.id !== (me === null || me === void 0 ? void 0 : me.id) ? /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__["jsx"])(antd__WEBPACK_IMPORTED_MODULE_3__["Card"], {
+      style: {
+        marginBottom: 20
+      },
       actions: [/*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxs"])("div", {
         children: ["\uC9F9\uC9F9", /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__["jsx"])("br", {}), userInfo.Posts]
       }, "twit"), /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxs"])("div", {
@@ -4180,7 +4222,11 @@ const CloseBtn = external_styled_components_default()(icons_["CloseOutlined"]).w
   displayName: "styles__CloseBtn",
   componentId: "sc-70ze4t-5"
 })(["position:absolute;right:0;top:0;padding:15px;line-height:14px;cursor:pointer;"]);
+// EXTERNAL MODULE: ./config/config.js
+var config = __webpack_require__("OcYQ");
+
 // CONCATENATED MODULE: ./components/imagesZoom/index.js
+
 
 
 
@@ -4214,7 +4260,7 @@ const ImagesZoom = ({
           slidesToScroll: 1,
           children: images.map(v => /*#__PURE__*/Object(jsx_runtime_["jsx"])(ImgWrapper, {
             children: /*#__PURE__*/Object(jsx_runtime_["jsx"])("img", {
-              src: `http://localhost:3065/${v.src}`,
+              src: `${v.src.replace(/\/thumb\//, '/original/')}`,
               alt: v.src
             })
           }, v.src))
@@ -4230,6 +4276,7 @@ const ImagesZoom = ({
 
 /* harmony default export */ var imagesZoom = (ImagesZoom);
 // CONCATENATED MODULE: ./components/PostImages.js
+
 
 
 
@@ -4255,7 +4302,7 @@ const PostImages = ({
     return /*#__PURE__*/Object(jsx_runtime_["jsxs"])(jsx_runtime_["Fragment"], {
       children: [/*#__PURE__*/Object(jsx_runtime_["jsx"])("img", {
         role: "presentation",
-        src: `http://localhost:3065/${images[0].src}`,
+        src: `${images[0].src}`,
         alt: images[0].src,
         onClick: onZoom
       }), showImagesZoom && /*#__PURE__*/Object(jsx_runtime_["jsx"])(imagesZoom, {
@@ -4273,7 +4320,7 @@ const PostImages = ({
           width: '50%',
           display: 'inline-block'
         },
-        src: `http://localhost:3065/${images[0].src}`,
+        src: `${images[0].src}`,
         alt: images[0].src,
         onClick: onZoom
       }), /*#__PURE__*/Object(jsx_runtime_["jsx"])("img", {
@@ -4282,7 +4329,7 @@ const PostImages = ({
           width: '50%',
           display: 'inline-block'
         },
-        src: `http://localhost:3065/${images[1].src}`,
+        src: `${images[1].src}`,
         alt: images[1].src,
         onClick: onZoom
       }), showImagesZoom && /*#__PURE__*/Object(jsx_runtime_["jsx"])(imagesZoom, {
@@ -4299,7 +4346,7 @@ const PostImages = ({
         style: {
           width: '50%'
         },
-        src: `http://localhost:3065/${images[0].src}`,
+        src: `${images[0].src}`,
         alt: images[0].src,
         onClick: onZoom
       }), showImagesZoom && /*#__PURE__*/Object(jsx_runtime_["jsx"])(imagesZoom, {
@@ -4403,26 +4450,73 @@ var link_default = /*#__PURE__*/__webpack_require__.n(next_link);
 
 
 
+
+
+const {
+  TextArea
+} = external_antd_["Input"];
+
 const PostCardContent = ({
-  postData
-}) =>
-/*#__PURE__*/
-// 첫 번째 게시글 #해시태그 #익스프레스
-Object(jsx_runtime_["jsx"])("div", {
-  children: postData.split(/(#[^\s#]+)/g).map((v, i) => {
-    if (v.match(/(#[^\s#]+)/)) {
-      return /*#__PURE__*/Object(jsx_runtime_["jsx"])(link_default.a, {
-        href: `/hashtag/${v.slice(1)}`,
-        children: /*#__PURE__*/Object(jsx_runtime_["jsx"])("a", {
-          children: v
-        })
-      }, i);
+  postData,
+  editMode,
+  onChangePost,
+  onCancelUpdate
+}) => {
+  const {
+    updatePostLoading,
+    updatePostDone
+  } = useSelector(state => state.post);
+  const {
+    0: editText,
+    1: setEditText
+  } = Object(external_react_["useState"])(postData);
+  useEffect(() => {
+    if (updatePostDone) {
+      onCancelUpdate();
     }
+  }, [updatePostDone]);
+  const onChangeText = Object(external_react_["useCallback"])(e => {
+    setEditText(e.target.valie);
+  });
+  return (
+    /*#__PURE__*/
+    // 첫 번째 게시글 #해시태그 #익스프레스
+    Object(jsx_runtime_["jsx"])("div", {
+      children: editMode ? /*#__PURE__*/Object(jsx_runtime_["jsxs"])(jsx_runtime_["Fragment"], {
+        children: [/*#__PURE__*/Object(jsx_runtime_["jsx"])(TextArea, {
+          value: editText,
+          onChange: onChangeText
+        }), /*#__PURE__*/Object(jsx_runtime_["jsxs"])(Button.Group, {
+          children: [/*#__PURE__*/Object(jsx_runtime_["jsx"])(Button, {
+            loading: updatePostLoading,
+            onClick: onChangePost(editText),
+            children: "\uC218\uC815"
+          }), /*#__PURE__*/Object(jsx_runtime_["jsx"])(Button, {
+            type: "danger",
+            onClick: onCancelUpdate,
+            children: "\uCDE8\uC18C"
+          })]
+        })]
+      }) : postData.split(/(#[^\s#]+)/g).map((v, i) => {
+        if (v.match(/(#[^\s#]+)/)) {
+          return /*#__PURE__*/Object(jsx_runtime_["jsx"])(link_default.a, {
+            href: `/hashtag/${v.slice(1)}`,
+            prefetch: false,
+            children: /*#__PURE__*/Object(jsx_runtime_["jsx"])("a", {
+              children: v
+            })
+          }, i);
+        }
 
-    return v;
-  })
-});
+        return v;
+      })
+    })
+  );
+};
 
+PostCardContent.defaultProps = {
+  editMode: false
+};
 /* harmony default export */ var components_PostCardContent = (PostCardContent);
 // EXTERNAL MODULE: ./reducers/user.js
 var user = __webpack_require__("LAVF");
@@ -4508,6 +4602,25 @@ const PostCard = ({
 
     return (_state$user$me = state.user.me) === null || _state$user$me === void 0 ? void 0 : _state$user$me.id;
   });
+  const {
+    0: editMode,
+    1: setEditMode
+  } = Object(external_react_["useState"])(false);
+  const onClickUpdate = Object(external_react_["useCallback"])(() => {
+    setEditMode(true);
+  }, []);
+  const onCancelUpdate = Object(external_react_["useCallback"])(() => {
+    setEditMode(false);
+  }, []);
+  const onChangePost = Object(external_react_["useCallback"])(editText => () => {
+    dispatch({
+      type: reducers_post["G" /* UPDATE_POST_REQUEST */],
+      data: {
+        PostID: post.id,
+        content: editText
+      }
+    });
+  }, [post]);
   const onLike = Object(external_react_["useCallback"])(() => {
     if (!id) {
       return alert('로그인이 필요합니다.');
@@ -4568,7 +4681,8 @@ const PostCard = ({
       }, "comment"), /*#__PURE__*/Object(jsx_runtime_["jsx"])(external_antd_["Popover"], {
         content: /*#__PURE__*/Object(jsx_runtime_["jsx"])(external_antd_["Button"].Group, {
           children: id && post.User.id === id ? /*#__PURE__*/Object(jsx_runtime_["jsxs"])(jsx_runtime_["Fragment"], {
-            children: [/*#__PURE__*/Object(jsx_runtime_["jsx"])(external_antd_["Button"], {
+            children: [!post.RetweetId && /*#__PURE__*/Object(jsx_runtime_["jsx"])(external_antd_["Button"], {
+              onClick: onClickUpdate,
               children: "\uC218\uC815"
             }), /*#__PURE__*/Object(jsx_runtime_["jsx"])(external_antd_["Button"], {
               type: "danger",
@@ -4599,6 +4713,7 @@ const PostCard = ({
         }), /*#__PURE__*/Object(jsx_runtime_["jsx"])(external_antd_["Card"].Meta, {
           avatar: /*#__PURE__*/Object(jsx_runtime_["jsx"])(link_default.a, {
             href: `/user/${post.Retweet.User.id}`,
+            prefetch: false,
             children: /*#__PURE__*/Object(jsx_runtime_["jsx"])("a", {
               children: /*#__PURE__*/Object(jsx_runtime_["jsx"])(external_antd_["Avatar"], {
                 children: post.Retweet.User.nickname[0]
@@ -4607,8 +4722,11 @@ const PostCard = ({
           }),
           title: post.Retweet.User.nickname,
           description: /*#__PURE__*/Object(jsx_runtime_["jsx"])(components_PostCardContent, {
-            postData: post.Retweet.content
-          })
+            postData: post.Retweet.content,
+            onChangePost: onChangePost,
+            onCancelUpdate: onCancelUpdate
+          }) // editMode={} 가 true 면 textarea를 보여주고 false면 기존 게시글을 보여준다.
+
         })]
       }) : /*#__PURE__*/Object(jsx_runtime_["jsxs"])(jsx_runtime_["Fragment"], {
         children: [/*#__PURE__*/Object(jsx_runtime_["jsx"])("div", {
@@ -4619,6 +4737,7 @@ const PostCard = ({
         }), /*#__PURE__*/Object(jsx_runtime_["jsx"])(external_antd_["Card"].Meta, {
           avatar: /*#__PURE__*/Object(jsx_runtime_["jsx"])(link_default.a, {
             href: `/user/${post.User.id}`,
+            prefetch: false,
             children: /*#__PURE__*/Object(jsx_runtime_["jsx"])("a", {
               children: /*#__PURE__*/Object(jsx_runtime_["jsx"])(external_antd_["Avatar"], {
                 children: post.User.nickname[0]
@@ -4627,6 +4746,9 @@ const PostCard = ({
           }),
           title: post.User.nickname,
           description: /*#__PURE__*/Object(jsx_runtime_["jsx"])(components_PostCardContent, {
+            editMode: editMode,
+            onChangePost: onChangePost,
+            onCancelUpdate: onCancelUpdate,
             postData: post.content
           })
         })]
@@ -4643,6 +4765,7 @@ const PostCard = ({
             author: item.User.nickname,
             avatar: /*#__PURE__*/Object(jsx_runtime_["jsx"])(link_default.a, {
               href: `/user/${item.User.id}`,
+              prefetch: false,
               children: /*#__PURE__*/Object(jsx_runtime_["jsx"])("a", {
                 children: /*#__PURE__*/Object(jsx_runtime_["jsx"])(external_antd_["Avatar"], {
                   children: item.User.nickname[0]
@@ -4825,9 +4948,9 @@ module.exports = require("@ant-design/icons");
 
 "use strict";
 /* unused harmony export initialState */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "G", function() { return UPLOAD_IMAGES_REQUEST; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "H", function() { return UPLOAD_IMAGES_SUCCESS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "F", function() { return UPLOAD_IMAGES_FAILURE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "J", function() { return UPLOAD_IMAGES_REQUEST; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "K", function() { return UPLOAD_IMAGES_SUCCESS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "I", function() { return UPLOAD_IMAGES_FAILURE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return LIKE_POST_REQUEST; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return LIKE_POST_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return LIKE_POST_FAILURE; });
@@ -4849,6 +4972,9 @@ module.exports = require("@ant-design/icons");
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return ADD_POST_REQUEST; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return ADD_POST_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return ADD_POST_FAILURE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "G", function() { return UPDATE_POST_REQUEST; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "H", function() { return UPDATE_POST_SUCCESS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "F", function() { return UPDATE_POST_FAILURE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "x", function() { return REMOVE_POST_REQUEST; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "y", function() { return REMOVE_POST_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "w", function() { return REMOVE_POST_FAILURE; });
@@ -4920,6 +5046,9 @@ const initialState = {
   addPostLoading: false,
   addPostDone: false,
   addPostError: null,
+  updatePostLoading: false,
+  updatePostDone: false,
+  updatePostError: null,
   removePostLoading: false,
   removePostDone: false,
   removePostError: null,
@@ -4977,6 +5106,9 @@ const LOAD_HASHTAG_POSTS_FAILURE = 'LOAD_HASHTAG_POSTS_FAILURE';
 const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
+const UPDATE_POST_REQUEST = 'UPDATE_POST_REQUEST';
+const UPDATE_POST_SUCCESS = 'UPDATE_POST_SUCCESS';
+const UPDATE_POST_FAILURE = 'UPDATE_POST_FAILURE';
 const REMOVE_POST_REQUEST = 'REMOVE_POST_REQUEST';
 const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS';
 const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
@@ -5050,7 +5182,7 @@ const reducer = (state = initialState, action) => Object(_util_produce__WEBPACK_
 
     case UPLOAD_IMAGES_SUCCESS:
       {
-        draft.imagePaths = action.data;
+        draft.imagePaths = draft.imagePaths.concat(action.data);
         draft.uploadImagesLoading = false;
         draft.uploadImagesDone = true;
         break;
@@ -5174,6 +5306,24 @@ const reducer = (state = initialState, action) => Object(_util_produce__WEBPACK_
       draft.addPostError = action.error;
       break;
 
+    case UPDATE_POST_REQUEST:
+      console.log('reducer post');
+      draft.updatePostLoading = true;
+      draft.updatePostDone = false;
+      draft.updatePostError = null;
+      break;
+
+    case UPDATE_POST_SUCCESS:
+      draft.mainPosts.find(v => v.id === action.data.PostId).content = action.data.content;
+      draft.updatePostLoading = false;
+      draft.updatePostDone = true;
+      break;
+
+    case UPDATE_POST_FAILURE:
+      draft.updatePostLoading = false;
+      draft.updatePostError = action.error;
+      break;
+
     case REMOVE_POST_REQUEST:
       console.log('reducer post');
       draft.removePostLoading = true;
@@ -5230,7 +5380,7 @@ const reducer = (state = initialState, action) => Object(_util_produce__WEBPACK_
   }
 });
 
-/* harmony default export */ __webpack_exports__["I"] = (reducer);
+/* harmony default export */ __webpack_exports__["L"] = (reducer);
 
 /***/ }),
 
