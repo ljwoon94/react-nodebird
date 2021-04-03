@@ -285,6 +285,32 @@ router.delete('/:postId/like', isLoggedIn, async (req,res,next)=>{ //DELETE /pos
     }
 });
 
+router.patch('/:postId', isLoggedIn, async (req, res, next)=>{ //DELETE /post
+    const hashtags = req.body.content.match(/#[^\s#]+/g);
+    try {
+            await Post.update({
+            content: req.body.content
+        }, {
+            where: {
+                id: req.params.postId,
+                UserId: req.user.id,
+            },
+        });
+        //시퀄라이즈에서 제거할땐 destroy를 쓴다 
+        const post = await Post.findOne({ where: {id: req.params.postId }})
+        if (hashtags) {
+            const result = await Promise.all(hashtags.map((tag) => Hashtag.findOrCreate({
+                where: { name: tag.slice(1).toLowerCase() },
+            }))); // [[노드, true], [리액트, true]]
+            await post.setHashtags(result.map((v) => v[0]));
+        }
+        res.status(200).json({PostId: parseInt(req.params.postId, 10), content: req.body.content });
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
 router.delete('/:postId', isLoggedIn, async (req, res, next)=>{ //DELETE /post
     try {
         await Post.destroy({

@@ -37,7 +37,7 @@ const Post = () => {
                 <meta property="og:description" content={singlePost.content} />
                 {/* <meta property="og:image" content={singlePost.Images[0] ? singlePost.Images[0].src : 'https://nodebird.com/favicon.ico'} /> */}
                 {/* 페비콘을 넣을때 사용해라 */}
-                <meta property="og:url" content={`http://jeongwoon.site/post/${id}`} />
+                <meta property="og:url" content={`https://jeongwoon.site/post/${id}`} />
                 {/* og 는 미리보기 og:url 미리보기 후 링크 주는거  */}
             </Head>
             <PostCard post={singlePost} />
