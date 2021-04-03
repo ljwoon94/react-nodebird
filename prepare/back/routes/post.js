@@ -257,7 +257,7 @@ router.post('/:postId/comment', isLoggedIn,async (req,res,next)=>{ //POST /post/
 
 router.patch('/:postId/like',isLoggedIn, async (req,res,next)=>{ //PATCH /post/1/likes
     try {
-        const post = await Post.findOne({ where: {id: req.params.postId}});
+        const post = await Post.findOne({ where: { id: req.params.postId }});
         if(!post){
             return res.status(403).send('게시글이 존재하지 않습니다.');
         }
@@ -285,7 +285,7 @@ router.delete('/:postId/like', isLoggedIn, async (req,res,next)=>{ //DELETE /pos
     }
 });
 
-router.patch('/:postId', isLoggedIn, async (req, res, next)=>{ //DELETE /post
+router.patch('/:postId', isLoggedIn, async (req, res, next)=>{ //PATCH /post
     const hashtags = req.body.content.match(/#[^\s#]+/g);
     try {
             await Post.update({
@@ -297,7 +297,7 @@ router.patch('/:postId', isLoggedIn, async (req, res, next)=>{ //DELETE /post
             },
         });
         //시퀄라이즈에서 제거할땐 destroy를 쓴다 
-        const post = await Post.findOne({ where: {id: req.params.postId }})
+        const post = await Post.findOne({ where: {id: req.params.postId }});
         if (hashtags) {
             const result = await Promise.all(hashtags.map((tag) => Hashtag.findOrCreate({
                 where: { name: tag.slice(1).toLowerCase() },

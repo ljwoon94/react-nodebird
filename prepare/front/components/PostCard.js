@@ -33,7 +33,7 @@ const PostCard = ({ post }) => {
         dispatch({
             type: UPDATE_POST_REQUEST,
             data: {
-                PostID: post.id,
+                PostId: post.id,
                 content: editText,
             },
         });
