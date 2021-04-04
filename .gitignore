@@ -8,3 +8,4 @@ node_modules
 prepare/nodebird.pem
 prepare/back/rootkey.csv
 prepare/react-nodebird.pem
+prepare/react-node
